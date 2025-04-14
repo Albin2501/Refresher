@@ -1,0 +1,6 @@
+server:
+  port: 2501
+logging:
+  level:
+    root: WARN
+    org.springframework: WARN

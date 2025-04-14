@@ -1,0 +1,81 @@
+.gridContainer {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    border: 3px solid #2d2d2d;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.cell {
+    display: flex;
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid #2d2d2d;
+    background-color: #2d2d2dad;
+}
+
+.gridMetaInformation {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 1rem;
+    max-width: 10rem;
+}
+
+.gridMetaInformation > div {
+    padding: 0.5rem;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.gridEntry {
+    background-color: #2d2d2dad;
+}
+
+.clear {
+    background-color: #900000;
+}
+
+.gridMetaInformation>div:hover {
+    filter: brightness(1.5);
+}
+
+.help {
+    background-color: rgba(0, 0, 100);
+    cursor: help !important;
+    position: relative;
+}
+
+.helpText {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    transform: translateX(-102.5%) translateY(-57.25%);
+}
+
+.text {
+    background-color: rgb(0, 0, 25);
+    border: 1px solid rgba(0, 0, 175);
+    padding: 0.5rem;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.arrow {
+    border-top: 1rem solid transparent;
+    border-bottom: 1rem solid transparent;
+    border-left: 1rem solid rgba(0, 0, 175);
+}

@@ -1,0 +1,33 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content : flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(90deg, rgb(0, 40, 1) 10%,
+  rgb(25, 170, 80) 70%, rgba(0, 0, 100, 0.5) 99%);
+}
+
+.menuItem {
+  user-select: none;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 3px;
+  margin: auto 0 auto 0;
+}
+
+.logo {
+  font-size: 2rem;
+}
+
+.feature {
+  font-size: 1.25rem;
+}
+
+.active {
+  color: rgb(175, 175, 255);
+}
+
+.inactive {
+  color: inherit;
+}

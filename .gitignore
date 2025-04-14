@@ -1,0 +1,12 @@
+### General ###
+.vscode
+
+### Frontend ###
+/frontend/.vscode
+/frontend/node_modules
+/frontend/.angular/cache
+
+### Backend ###
+/backend/.vscode
+/backend/target
+/backend/src/main/java/albin2501/util/grid.json

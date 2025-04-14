@@ -1,0 +1,9 @@
+<div class='header'>
+    <div *ngFor="let menu of menuItem; let i = index"
+        routerLink="{{menuItemLink[i]}}" class='menuItem'
+        (click)="activateMenuItem(i)"
+        [ngClass]="{'active': activeItem[i], 'inactive': !activeItem[i],
+        'logo': i === 0,'feature': i !== 0}">
+        {{menu}}
+    </div>
+</div>
