@@ -19,3 +19,5 @@ Execute [RUN.cmd](RUN.cmd) to build and start the application. Giving permission
 ## Grid ##
 
 A grid may be selected and colored in. Selecting a singular cell or an area of cells will change the appearance to a randomized color. If cells of different colors are adjacent to each other, then they will acquire a different uniform color. See *flooding algorithm* for more information.
+
+![showcase](https://github.com/user-attachments/assets/23d06e84-bf91-4c00-8e9a-f643dc1cce49)
