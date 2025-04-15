@@ -10,11 +10,15 @@ import albin2501.dto.GridDataDto;
 import albin2501.dto.GridDto;
 import albin2501.exception.PersistenceException;
 
+// TODO: Add database instead of .json file
+
 public class GridPersistence {
     private static Long n = 25L;
     private static Long m = 50L;
     private static int grids = 3;
     private static String fileName = "./src/main/java/albin2501/util/grid.json";
+
+    // TODO: dto <-> entity
 
     public static GridDto[] getGrids() {
         GridDto[] data = null;
@@ -50,6 +54,7 @@ public class GridPersistence {
     }
 
     public static GridDto putGrid(GridDto gridDto) {
+        // TODO: This isn't good - needs fix
         try {
             File file = new File(fileName);
 

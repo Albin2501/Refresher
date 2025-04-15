@@ -1,9 +1,15 @@
 package albin2501.util;
 
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
 import albin2501.dto.GridDataDto;
 import albin2501.dto.GridSelectionDto;
+import albin2501.dto.ImageDto;
+import albin2501.entity.TextArt;
 import albin2501.exception.NotFoundException;
 import albin2501.exception.ValidationException;
+import java.io.IOException;
 
 public class Validator {
 
@@ -35,6 +41,46 @@ public class Validator {
             ((gridSelectionDto.pos2[0] < 0 || gridSelectionDto.pos2[0] >= gridDataDto.n) ||
             (gridSelectionDto.pos2[1] < 0 || gridSelectionDto.pos2[1] >= gridDataDto.m)))
         message.append(message.length() > 0 ? " " : "").append("Second selected point out of bounds.");
+
+        if (message.length() > 0)
+        throw new ValidationException(message.toString());
+    }
+
+    public static void validateTextArtId(Long id, TextArt[] textArt) {
+        for (TextArt art : textArt) {
+            if (art.id == id) return;
+        }
+        throw new NotFoundException("TextArt not found.");
+    }
+
+    public static void validateTextArt(ImageDto imageDto) {
+        StringBuilder message = new StringBuilder("");
+
+        if (imageDto.image == null || imageDto.width == null || imageDto.height == null)
+        throw new ValidationException("Image not well formatted.");
+
+        if (imageDto.width < 1)
+        message.append("Width must be at least 1 character wide.");
+
+        if (imageDto.width > 256)
+        message.append(message.length() > 0 ? " " : "").append("Width must be at most 256 characters wide.");
+
+        if (imageDto.height < 1)
+        message.append("Height must be at least 1 character wide.");
+
+        if (imageDto.height > 256)
+        message.append(message.length() > 0 ? " " : "").append("Height must be at most 256 characters wide.");
+
+        if (imageDto.image.isEmpty())
+        message.append(message.length() > 0 ? " " : "").append("File is empty.");
+
+        try {
+            BufferedImage image = ImageIO.read(imageDto.image.getInputStream());
+            if (image == null)
+            message.append(message.length() > 0 ? " " : "").append("Image is not valid.");
+        } catch (IOException e) {
+            message.append(message.length() > 0 ? " " : "").append("Image can't be read.");
+        }
 
         if (message.length() > 0)
         throw new ValidationException(message.toString());
