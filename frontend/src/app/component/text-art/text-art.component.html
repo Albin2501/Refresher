@@ -1,0 +1,80 @@
+<div *ngIf="deleteConfirmation" class="deleteConfirmationContainer">
+    <div>
+        Are you sure you want to delete everything?
+    </div>
+    <div class="deleteConfirmation">
+        <button  class="gray buttonConfirmation" (click)="deleteConfirmation = false">
+            CANCEL
+        </button>
+        <button  class="red buttonConfirmation" (click)="deleteAllTextArt();">
+            DELETE
+        </button>
+    </div>
+</div>
+
+<form class="formContainer" [formGroup]="formGroup" (ngSubmit)="postTextArt()">
+    <div class="inputEntry">
+        <label for="image" class="imageLabel gray grayBorder activeText">
+            {{formGroup.get('image')?.value !== null ?
+            (formGroup.get('image')?.value?.name.length &lt;= 16 ? 
+            formGroup.get('image')?.value?.name :
+            (formGroup.get('image')?.value?.name.substring(0, 16) + '...')) : 'Image'}}
+        </label>
+        <input id="image" type="file" (change)="onImageChange($event)" hidden/>
+    </div>
+    <div class="inputEntry">
+        <label for="width" class="label activeText">Width</label>
+        <button type="button" class="increase utilButton"
+         (click)="update('width', 1)" [disabled]="formGroup.get('width')?.value &gt;= 256">
+            +
+        </button>
+        <input id="width" type="number" min="1" max="256" formControlName="width"/>
+        <button type="button" class="decrease utilButton"
+            (click)="update('width', -1)" [disabled]="!(formGroup.get('width')?.value &gt; 1)">
+            -
+        </button>
+    </div>
+    <div class="inputEntry">
+        <label for="height" class="label activeText">Height</label>
+        <button type="button" class="increase utilButton"
+            (click)="update('height', 1)" [disabled]="formGroup.get('height')?.value &gt;= 128">
+            +
+        </button>
+        <input id="height" type="number" min="1" max="128" formControlName="height"/>
+        <button type="button" class="decrease utilButton" utilButton
+            (click)="update('height', -1)" [disabled]="!(formGroup.get('height')?.value &gt; 1)">
+            -
+        </button>
+    </div>
+
+    <button type="submit" class="green button" [disabled]="formGroup.invalid">
+        UPLOAD
+    </button>
+    <button type="button" class="red button" (click)="deleteConfirmation = true">
+        DELETE
+    </button>
+</form>
+
+<div class="textArtContainer" *ngIf="textArtDto.length > 0">
+    <div class="textArt grayBorder" (mouseover)="clipBoard = true" (mouseleave)="clipBoard = false">
+        <div class="art">{{textArtDto[selectedArt].art}}</div>
+        <button *ngIf="clipBoard" class="small gray clipboard" title="Copy to clipboard"
+        (click)="copyToClipboard(textArtDto[selectedArt].art)">🗒️</button>
+    </div>
+    <div class="historyContainer grayBorder">
+        <div class="historyEntry" *ngFor="let history of textArtDto; let i = index" (click)="selectedArt = i"
+            [class]="{'activeBackground': this.selectedArt === i,'gray': this.selectedArt !== i}">
+            <div class="activeText">
+                {{history.name}}
+            </div>
+            <div class="subtext">
+                {{history.width}}&times;{{history.height}}px
+            </div>
+            <div class="additionalInfo">
+                <div class="subtext">{{history.time | date:"dd.MM.yyyy 'at' HH:mm"}}</div>
+                <button class="small red" title="Delete entry"
+                (click)="$event.stopPropagation(); deleteTextArt(history.id, i)">🗑</button>
+            </div>
+        </div>
+    </div>
+</div>

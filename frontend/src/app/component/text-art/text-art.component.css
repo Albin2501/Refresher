@@ -1,0 +1,169 @@
+/* --------------------- Deletion CSS --------------------- */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+
+.deleteConfirmationContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    gap: 1rem;
+}
+
+.deleteConfirmation {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.buttonConfirmation {
+    padding: 0.5rem 0.25rem;
+}
+
+/* --------------------- Form CSS --------------------- */
+/* ---------------------------------------------------- */
+/* ---------------------------------------------------- */
+
+.formContainer {
+    display: flex;
+    justify-content : center;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem;
+    z-index: 0;
+}
+
+.inputEntry {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+input {
+    padding: 0.25rem;
+    width: 3rem;
+    text-align: center;
+    border: none;
+}
+
+.imageLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 1rem;
+    padding: 1rem;
+    width: 10rem;
+    height: 2.25rem;
+    overflow-x: hidden;
+}
+
+.imageLabel:hover {
+    background-color: rgb(76, 105, 80);
+}
+
+.increase {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.decrease {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.formContainer .label {
+    font-size: 0.75rem;
+}
+
+.utilButton {
+    font-size: 0.75rem;
+    padding: 0.25rem;
+}
+
+.button {
+    margin-top: 1rem;
+    padding: 0.5rem 0.25rem;
+}
+
+/* --------------------- Art CSS --------------------- */
+/* --------------------------------------------------- */
+/* --------------------------------------------------- */
+
+.textArtContainer {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    z-index: 0;
+}
+
+.textArt {
+    background-color: black;
+    width: 24rem;
+    height: 22rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.art {
+    font-family: monospace;
+    font-size: 2.5px;
+    line-height: 2.5px;
+    white-space: pre;
+    text-align: left;
+    display: inline-block;
+}
+
+.clipboard {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.historyContainer {
+    direction: rtl;
+    width: 24rem;
+    height: 22rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.historyEntry {
+    direction: ltr;
+    padding: 0.25rem;
+}
+
+.historyEntry:hover {
+    filter: brightness(1.5);
+}
+
+.subtext {
+    font-size: 0.75rem;
+}
+
+.additionalInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.small {
+    padding: 0;
+    font-size: 0.75rem;
+    width: 1.25rem;
+    height: 1.25rem;
+}

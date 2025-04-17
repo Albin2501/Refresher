@@ -1,5 +1,5 @@
 <div class="gridContainer" *ngIf="gridDto.grid">
-    <div class="grid" (mouseleave)="resetActiveCells(); resetMouse()">
+    <div class="grid grayBorder" (mouseleave)="resetActiveCells(); resetMouse()">
         <div class="row" *ngFor="let row of gridDto.grid; let i = index; trackBy: trackByIndex">
             <div (mousedown)="mouseDown(i, j, $event)" (mouseup)="correctMouseLogic ? mouseUp(i, j, $event) : null"
                 (mouseover)="mouseHover(i, j, $event)"
@@ -10,13 +10,13 @@
         </div>
     </div>
     <div class="gridMetaInformation">
-        <div class="gridEntry" (click)="getGrid(gridEntry)"*ngFor="let gridEntry of gridDataDto.ids">
+        <button class="gridEntry" (click)="getGrid(gridEntry)"*ngFor="let gridEntry of gridDataDto.ids">
             Grid #{{gridEntry}}
-        </div>
-        <div class="clear" *ngIf="gridDto.grid" (click)="clearGrid(gridDto.id)">
+        </button>
+        <button class="red" *ngIf="gridDto.grid" (click)="clearGrid(gridDto.id)">
             Clear
-        </div>
-        <div class="help" (mouseover)="helpText = true" (mouseleave)="helpText = false">
+        </button>
+        <button class="help blue" (mouseover)="helpText = true" (mouseleave)="helpText = false">
             Help
             <div class="helpText" *ngIf="helpText">
                 <div class="text">
@@ -29,6 +29,6 @@
                 </div>
                 <div class="arrow"></div>
             </div>
-        </div>
+        </button>
     </div>
 </div>

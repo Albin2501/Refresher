@@ -10,23 +10,23 @@ import { GridDataDto } from '../../dto/GridDataDto';
   providedIn: 'root'
 })
 export class GridService {
-  gripUri = backendBase + '/grid';
+  gridUri = backendBase + '/grid';
 
   constructor(private http: HttpClient) { }
 
   getGridData(): Observable<GridDataDto> {
-    return this.http.get<GridDataDto>(this.gripUri + '/data');
+    return this.http.get<GridDataDto>(this.gridUri + '/data');
   }
 
   getGrid(id: number): Observable<GridDto> {
-    return this.http.get<GridDto>(this.gripUri + '/' + id);
+    return this.http.get<GridDto>(this.gridUri + '/' + id);
   }
 
   putGrid(id: number, gridSelectionDto: GridSelectionDto): Observable<GridDto> {
-    return this.http.put<GridDto>(this.gripUri + '/' + id, gridSelectionDto);
+    return this.http.put<GridDto>(this.gridUri + '/' + id, gridSelectionDto);
   }
 
   clearGrid(id: number): Observable<GridDto> {
-    return this.http.put<GridDto>(this.gripUri + '/clear/' + id, null);
+    return this.http.put<GridDto>(this.gridUri + '/clear/' + id, null);
   }
 }

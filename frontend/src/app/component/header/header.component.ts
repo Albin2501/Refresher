@@ -13,11 +13,13 @@ import { filter } from 'rxjs/operators';
 export class HeaderComponent {
   menuItem: string[] = [
     'REFRESHER',
-    'GRID'
+    'GRID',
+    'TEXTART'
   ];
   menuItemLink: string[] = [
     '',
-    '/grid'
+    '/grid',
+    '/textArt'
   ];
   activeItem: boolean[] = [];
 

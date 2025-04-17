@@ -1,8 +1,9 @@
 .textContainer {
   position: absolute;
-  top: 50%;
+  top: calc(50% + 2.5rem);
   left: 50%;
   transform: translate(-50%, -50%);
+  white-space: nowrap;
 }
 
 .text {
@@ -11,5 +12,4 @@
   
 a {
   text-decoration: none;
-  color: rgb(25, 170, 80);
 }

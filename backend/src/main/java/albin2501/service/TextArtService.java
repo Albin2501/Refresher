@@ -39,6 +39,7 @@ public class TextArtService {
         }
     }
 
+    @SuppressWarnings("null")
     public static TextArtDto postTextArt(ImageDto imageDto) {
         try {
             Validator.validateTextArt(imageDto);
@@ -78,7 +79,14 @@ public class TextArtService {
                 asciiArt.append("\n");
             }
 
-            return Mapper.textArtToTextArtDto(TextArtPersistence.postTextArt(asciiArt.toString()));
+            String imageName = imageDto.image.getOriginalFilename();
+
+            return Mapper.textArtToTextArtDto(
+                TextArtPersistence.postTextArt(asciiArt.toString(),
+                imageName.length() < 32 ? imageName : 
+                (imageName.substring(0, 32) + "..."),
+                imageDto.width, imageDto.height)
+            );
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         } catch (IOException e) {

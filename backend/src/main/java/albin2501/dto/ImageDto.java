@@ -7,30 +7,12 @@ public class ImageDto {
     public Long width;
     public Long height;
 
-    public MultipartFile getImage() {
-        return this.image;
-    }
+    public ImageDto() { }
 
-    public void setImage(MultipartFile image) {
+    public ImageDto(MultipartFile image, Long width, Long height) {
         this.image = image;
-    }
-
-    public Long getWidth() {
-        return this.width;
-    }
-
-    public void setWidth(Long width) {
         this.width = width;
-    }
-
-    public Long getHeight() {
-        return this.height;
-    }
-
-    public void setHeight(Long height) {
-        // since chars are twice as tall as they are wide, the height needs to be halved
-        // so that the image is square if 1:1 = width:height
-        this.height = height / 2;
+        this.height = height;
     }
 
     public String toString() {

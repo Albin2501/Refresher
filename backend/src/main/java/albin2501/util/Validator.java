@@ -68,11 +68,16 @@ public class Validator {
         if (imageDto.height < 1)
         message.append("Height must be at least 1 character wide.");
 
-        if (imageDto.height > 256)
-        message.append(message.length() > 0 ? " " : "").append("Height must be at most 256 characters wide.");
+        // since chars are approximately twice as tall as they are wide, the height needs to be halved
+        // so that the image is square if 1:1=width:height
+        if (imageDto.height > 128)
+        message.append(message.length() > 0 ? " " : "").append("Height must be at most 128 characters wide.");
 
         if (imageDto.image.isEmpty())
         message.append(message.length() > 0 ? " " : "").append("File is empty.");
+
+        if (imageDto.image.getOriginalFilename() == null)
+        message.append(message.length() > 0 ? " " : "").append("File name must be set.");
 
         try {
             BufferedImage image = ImageIO.read(imageDto.image.getInputStream());
