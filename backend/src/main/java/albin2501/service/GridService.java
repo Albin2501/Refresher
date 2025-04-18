@@ -14,6 +14,8 @@ import albin2501.persistence.GridPersistence;
 import albin2501.service.GridService;
 import albin2501.util.Validator;
 
+// TODO: Refactor - dependency injection instead of static class methods
+
 @Service
 public class GridService {
 

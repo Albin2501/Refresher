@@ -12,6 +12,7 @@ import albin2501.entity.TextArt;
 import albin2501.exception.PersistenceException;
 
 // TODO: Add database instead of .json file
+// TODO: Refactor - dependency injection instead of static class methods
 
 public class TextArtPersistence {
     private static String fileName = "./src/main/java/albin2501/util/textArt.json";

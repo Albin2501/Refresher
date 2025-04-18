@@ -11,6 +11,7 @@ import albin2501.dto.GridDto;
 import albin2501.exception.PersistenceException;
 
 // TODO: Add database instead of .json file
+// TODO: Refactor - dependency injection instead of static class methods
 
 public class GridPersistence {
     private static Long n = 25L;

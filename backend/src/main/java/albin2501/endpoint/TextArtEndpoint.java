@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import albin2501.dto.ImageDto;
 import albin2501.dto.TextArtDto;
@@ -20,7 +21,8 @@ import albin2501.exception.ValidationException;
 import albin2501.service.TextArtService;
 import albin2501.util.Config;
 
-import org.springframework.http.HttpStatus;
+// TODO: Refactor - dependency injection instead of static class methods
+// TODO: Mapper here, not in service
 
 @RestController
 @RequestMapping(path = TextArtEndpoint.url)

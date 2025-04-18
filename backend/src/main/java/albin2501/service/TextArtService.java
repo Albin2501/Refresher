@@ -19,6 +19,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+// TODO: Refactor - dependency injection instead of static class methods
+
 @Service
 public class TextArtService {
 

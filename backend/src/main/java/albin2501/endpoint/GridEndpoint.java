@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import albin2501.dto.GridDataDto;
 import albin2501.dto.GridDto;
@@ -19,7 +20,7 @@ import albin2501.exception.ValidationException;
 import albin2501.service.GridService;
 import albin2501.util.Config;
 
-import org.springframework.http.HttpStatus;
+// TODO: Refactor - dependency injection instead of static class methods
 
 @RestController
 @RequestMapping(path = GridEndpoint.url)

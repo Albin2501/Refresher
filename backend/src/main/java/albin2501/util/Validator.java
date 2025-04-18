@@ -11,6 +11,8 @@ import albin2501.exception.NotFoundException;
 import albin2501.exception.ValidationException;
 import java.io.IOException;
 
+// TODO: Refactor - dependency injection instead of static class methods
+
 public class Validator {
 
     public static void validateGridId(Long id, GridDataDto gridDataDto) {
