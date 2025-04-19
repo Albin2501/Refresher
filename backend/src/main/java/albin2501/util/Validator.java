@@ -9,11 +9,15 @@ import albin2501.dto.ImageDto;
 import albin2501.entity.TextArt;
 import albin2501.exception.NotFoundException;
 import albin2501.exception.ValidationException;
+import albin2501.util.datatype.CustomGraph;
+
 import java.io.IOException;
 
 // TODO: Refactor - dependency injection instead of static class methods
 
 public class Validator {
+
+    public Validator() { }
 
     public static void validateGridId(Long id, GridDataDto gridDataDto) {
         for (Long x : gridDataDto.ids) {
@@ -91,5 +95,10 @@ public class Validator {
 
         if (message.length() > 0)
         throw new ValidationException(message.toString());
+    }
+
+    public void validateGraph(CustomGraph customGraph) {
+        if (customGraph == null)
+        throw new ValidationException("Graph needs to be generated first.");
     }
 }

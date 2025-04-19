@@ -1,14 +1,16 @@
-package albin2501.dto;
+package albin2501.util.datatype;
 
-public class ShortestPathDto {
+public class CustomEdge {
     private char start;
     private char end;
+    private Long weight;
 
-    public ShortestPathDto() { }
+    public CustomEdge() { }
 
-    public ShortestPathDto(char start, char end) {
+    public CustomEdge(char start, char end, Long weight) {
         this.start = start;
         this.end = end;
+        this.weight = weight;
     }
 
     public char getStart() {
@@ -27,8 +29,17 @@ public class ShortestPathDto {
         this.end = end;
     }
 
+    public Long getWeight() {
+        return this.weight;
+    }
+
+    public void setWeight(Long weight) {
+        this.weight = weight;
+    }
+
     public String toString() {
         return (new StringBuilder("start: ").append(start).append("\n").
-        append("end: ").append(end).append("\n")).toString();
+        append("end: ").append(end).append("\n").
+        append("weight: ").append(weight)).toString();
     }
 }

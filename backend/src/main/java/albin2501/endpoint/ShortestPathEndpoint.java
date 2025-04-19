@@ -12,11 +12,12 @@ import org.springframework.http.HttpStatus;
 
 import albin2501.dto.ShortestPathDataDto;
 import albin2501.dto.ShortestPathDto;
+import albin2501.dto.ShortestPathResultDto;
 import albin2501.exception.ServiceException;
 import albin2501.service.ShortestPathService;
 import albin2501.util.Config;
 import albin2501.util.Mapper;
-import albin2501.util.datatype.CustomNode;
+import albin2501.util.datatype.CustomGraph;
 
 @RestController
 @RequestMapping(path = ShortestPathEndpoint.url)
@@ -39,7 +40,7 @@ public class ShortestPathEndpoint {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public CustomNode getRandomGraph() {
+    public CustomGraph getRandomGraph() {
         try {
             return shortestPathService.getRandomGraph();
         } catch (ServiceException e) {
@@ -49,9 +50,9 @@ public class ShortestPathEndpoint {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ShortestPathDto getShortestPath(@RequestBody CustomNode graph) {
+    public ShortestPathResultDto getShortestPath(@RequestBody ShortestPathDto shortestPathDto) {
         try {
-            return shortestPathService.getShortestPath();
+            return shortestPathService.getShortestPath(shortestPathDto);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
