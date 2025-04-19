@@ -1,10 +1,10 @@
 package albin2501.persistence;
 
-import albin2501.entity.ShortestPath;
+import albin2501.entity.ShortestPathData;
 
 public class ShortestPathPersistence {
-    
-        public ShortestPath getShortestPath() {
-            return new ShortestPath();
+
+    public ShortestPathData getShortestPathData() {
+        return null;
     }
 }

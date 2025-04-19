@@ -4,22 +4,21 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class CustomNode {
-    String name;
+    char name;
     ArrayList<CustomNodeContainer> edges;
-
 
     public CustomNode() { }
 
-    public CustomNode(String name, ArrayList<CustomNodeContainer> edges) {
+    public CustomNode(char name, ArrayList<CustomNodeContainer> edges) {
         this.name = name;
         this.edges = edges;
     }
 
-    public String getName() {
+    public char getName() {
         return this.name;
     }
 
-    public void setName(String name) {
+    public void setName(char name) {
         this.name = name;
     }
 
@@ -40,6 +39,11 @@ public class CustomNode {
         }
         CustomNode customNode = (CustomNode) o;
         return Objects.equals(name, customNode.name) && Objects.equals(edges, customNode.edges);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, edges);
     }
 
     @Override

@@ -41,6 +41,11 @@ public class CustomNodeContainer {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(value, customNode);
+    }
+
+    @Override
     public String toString() {
         return (new StringBuilder("value: ").append(value).append("\n").
         append("customNode: ").append(customNode.toString())).toString();
