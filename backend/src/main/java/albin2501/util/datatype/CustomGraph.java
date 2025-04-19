@@ -1,14 +1,15 @@
 package albin2501.util.datatype;
 
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class CustomGraph {
     private char[] nodes;
-    private CustomEdge[] edges;
+    private ArrayList<CustomEdge> edges;
 
     public CustomGraph() { }
 
-    public CustomGraph(char[] nodes, CustomEdge[] edges) {
+    public CustomGraph(char[] nodes, ArrayList<CustomEdge> edges) {
         this.nodes = nodes;
         this.edges = edges;
     }
@@ -21,11 +22,11 @@ public class CustomGraph {
         this.nodes = nodes;
     }
 
-    public CustomEdge[] getEdges() {
+    public ArrayList<CustomEdge> getEdges() {
         return this.edges;
     }
 
-    public void setEdges(CustomEdge[] edges) {
+    public void setEdges(ArrayList<CustomEdge> edges) {
         this.edges = edges;
     }
 

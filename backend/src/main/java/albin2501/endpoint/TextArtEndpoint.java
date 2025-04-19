@@ -12,16 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
-
-import albin2501.dto.ImageDto;
-import albin2501.dto.TextArtDto;
+import albin2501.dto.textArt.ImageDto;
+import albin2501.dto.textArt.TextArtDto;
 import albin2501.exception.NotFoundException;
 import albin2501.exception.ServiceException;
 import albin2501.exception.ValidationException;
 import albin2501.service.TextArtService;
 import albin2501.util.Config;
+import albin2501.util.Mapper;
 
-// TODO: Refactor - dependency injection instead of static class methods
 // TODO: Mapper here, not in service
 
 @RestController
@@ -29,12 +28,19 @@ import albin2501.util.Config;
 @CrossOrigin(origins = Config.frontendBase) // CORS access control
 public class TextArtEndpoint {
     final static String url = "/textArt";
+    private TextArtService textArtService;
+    private Mapper mapper;
+
+    public TextArtEndpoint(TextArtService textArtService, Mapper mapper) {
+        this.textArtService = textArtService;
+        this.mapper = mapper;
+    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public TextArtDto[] getTextArt() {
         try {
-            return TextArtService.getTextArt();
+            return textArtService.getTextArt();
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
@@ -48,7 +54,7 @@ public class TextArtEndpoint {
                 @RequestParam("height") Long height
             ) {
         try {
-            return TextArtService.postTextArt(new ImageDto(image, width, height));
+            return textArtService.postTextArt(new ImageDto(image, width, height));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (ValidationException e) {
@@ -60,7 +66,7 @@ public class TextArtEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public boolean deleteTextArt() {
         try {
-            return TextArtService.deleteTextArt();
+            return textArtService.deleteTextArt();
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {
@@ -72,7 +78,7 @@ public class TextArtEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public boolean deleteTextArtById(@PathVariable("id") Long id) {
         try {
-            return TextArtService.deleteTextArtById(id);
+            return textArtService.deleteTextArtById(id);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {

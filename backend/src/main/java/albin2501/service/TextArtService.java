@@ -1,62 +1,65 @@
 package albin2501.service;
 
 import java.util.Arrays;
-
 import javax.imageio.ImageIO;
-
 import org.springframework.stereotype.Service;
-
-import albin2501.dto.ImageDto;
-import albin2501.dto.TextArtDto;
+import albin2501.dto.textArt.ImageDto;
+import albin2501.dto.textArt.TextArtDto;
 import albin2501.entity.TextArt;
 import albin2501.exception.PersistenceException;
 import albin2501.exception.ServiceException;
 import albin2501.persistence.TextArtPersistence;
 import albin2501.util.Mapper;
 import albin2501.util.Validator;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-// TODO: Refactor - dependency injection instead of static class methods
-
 @Service
 public class TextArtService {
+    private TextArtPersistence textArtPersistence;
+    private Validator validator;
+    private Mapper mapper;
 
-    public static TextArtDto[] getTextArt() {
+    public TextArtService(TextArtPersistence textArtPersistence, Validator validator, Mapper mapper) {
+        this.textArtPersistence = textArtPersistence;
+        this.validator = validator;
+        this.mapper = mapper;
+    }
+
+    public TextArtDto[] getTextArt() {
         try {
-            return Arrays.stream(TextArtPersistence.getTextArt()).
-                    map(x -> Mapper.textArtToTextArtDto(x)).toArray(TextArtDto[]::new);
+            return Arrays.stream(textArtPersistence.getTextArt()).
+                    map(x -> mapper.textArtToTextArtDto(x)).toArray(TextArtDto[]::new);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
 
-    public static TextArt[] getTextArtValidate() {
+    public TextArt[] getTextArtValidate() {
         try {
-            return TextArtPersistence.getTextArt();
+            return textArtPersistence.getTextArt();
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
 
     @SuppressWarnings("null")
-    public static TextArtDto postTextArt(ImageDto imageDto) {
+    public TextArtDto postTextArt(ImageDto imageDto) {
         try {
-            Validator.validateTextArt(imageDto);
+            validator.validateTextArt(imageDto);
 
             // Scale image to user specification
             // Write scaled image to BufferedImage in gray scale
             char[] asciiChars = {
                 ' ', '.', ':', '-', '~', '+', '*', '|', 'n', 'a', 'A', 'N', '0', '&', '#', '@'
             };
-            BufferedImage image = ImageIO.read(imageDto.image.getInputStream());
-            BufferedImage resizedImage = new BufferedImage(imageDto.width.intValue(),
-                imageDto.height.intValue(), BufferedImage.TYPE_BYTE_GRAY);
+            BufferedImage image = ImageIO.read(imageDto.image().getInputStream());
+            BufferedImage resizedImage = new BufferedImage(imageDto.width().intValue(),
+                imageDto.height().intValue(), BufferedImage.TYPE_BYTE_GRAY);
             Graphics2D g2d = resizedImage.createGraphics();
-            g2d.drawImage(image.getScaledInstance(imageDto.width.intValue(),
-                imageDto.height.intValue(), Image.SCALE_DEFAULT), 0, 0, null);
+            g2d.drawImage(image.getScaledInstance(imageDto.width().intValue(),
+                imageDto.height().intValue(), Image.SCALE_DEFAULT), 0, 0, null);
             g2d.dispose();
 
             // Create ASCII art of resizedImage
@@ -64,8 +67,8 @@ public class TextArtService {
             float normalizedVal, correctVal;
 
             StringBuilder asciiArt = new StringBuilder();
-            for (int y = 0; y < imageDto.height.intValue(); y++) {
-                for (int x = 0; x < imageDto.width.intValue(); x++) {
+            for (int y = 0; y < imageDto.height().intValue(); y++) {
+                for (int x = 0; x < imageDto.width().intValue(); x++) {
                     // .getRGB gets 4 bytes where red, green and blue are all uniform because of TYPE_BYTE_GRAY
                     // binary conjunction gets (in this case) the blue chanel for gray value of pixel
                     // normalized value of gray scale between 0 and 1
@@ -81,13 +84,13 @@ public class TextArtService {
                 asciiArt.append("\n");
             }
 
-            String imageName = imageDto.image.getOriginalFilename();
+            String imageName = imageDto.image().getOriginalFilename();
 
-            return Mapper.textArtToTextArtDto(
-                TextArtPersistence.postTextArt(asciiArt.toString(),
+            return mapper.textArtToTextArtDto(
+                textArtPersistence.postTextArt(asciiArt.toString(),
                 imageName.length() < 32 ? imageName : 
                 (imageName.substring(0, 32) + "..."),
-                imageDto.width, imageDto.height)
+                imageDto.width(), imageDto.height())
             );
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -96,18 +99,18 @@ public class TextArtService {
         }
     }
 
-    public static boolean deleteTextArt() {
+    public boolean deleteTextArt() {
         try {
-            return TextArtPersistence.deleteTextArt();
+            return textArtPersistence.deleteTextArt();
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
 
-    public static boolean deleteTextArtById(Long id) {
+    public boolean deleteTextArtById(Long id) {
         try {
-            Validator.validateTextArtId(id, getTextArtValidate());
-            return TextArtPersistence.deleteTextArtById(id);
+            validator.validateTextArtId(id, getTextArtValidate());
+            return textArtPersistence.deleteTextArtById(id);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }

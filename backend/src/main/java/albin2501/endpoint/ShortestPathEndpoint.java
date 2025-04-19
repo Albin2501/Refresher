@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
-
-import albin2501.dto.ShortestPathDataDto;
-import albin2501.dto.ShortestPathDto;
-import albin2501.dto.ShortestPathResultDto;
+import albin2501.dto.shortestPath.ShortestPathDataDto;
+import albin2501.dto.shortestPath.ShortestPathDto;
+import albin2501.dto.shortestPath.ShortestPathResultDto;
 import albin2501.exception.ServiceException;
 import albin2501.service.ShortestPathService;
 import albin2501.util.Config;

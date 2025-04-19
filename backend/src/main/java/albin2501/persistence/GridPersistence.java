@@ -3,25 +3,24 @@ package albin2501.persistence;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-
+import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import albin2501.dto.GridDataDto;
-import albin2501.dto.GridDto;
+import albin2501.dto.grid.GridDataDto;
+import albin2501.dto.grid.GridDto;
 import albin2501.exception.PersistenceException;
 
 // TODO: Add database instead of .json file
-// TODO: Refactor - dependency injection instead of static class methods
 
+@Repository
 public class GridPersistence {
-    private static Long n = 25L;
-    private static Long m = 50L;
-    private static int grids = 3;
-    private static String fileName = "./src/main/java/albin2501/util/grid.json";
+    private Long n = 25L;
+    private Long m = 50L;
+    private int grids = 3;
+    private String fileName = "./src/main/java/albin2501/util/grid.json";
 
     // TODO: dto <-> entity
 
-    public static GridDto[] getGrids() {
+    public GridDto[] getGrids() {
         GridDto[] data = null;
 
         try {
@@ -46,15 +45,15 @@ public class GridPersistence {
         return data;
     }
 
-    public static GridDataDto getGridData() {
-        return new GridDataDto(n, m, Arrays.stream(getGrids()).map(x -> x.id).toArray(Long[]::new));
+    public GridDataDto getGridData() {
+        return new GridDataDto(n, m, Arrays.stream(getGrids()).map(x -> x.getId()).toArray(Long[]::new));
     }
 
-    public static GridDto getGrid(Long id) {
+    public GridDto getGrid(Long id) {
         return getGrids()[id.intValue()];
     }
 
-    public static GridDto putGrid(GridDto gridDto) {
+    public GridDto putGrid(GridDto gridDto) {
         // TODO: This isn't good - needs fix
         try {
             File file = new File(fileName);
@@ -62,7 +61,7 @@ public class GridPersistence {
             // Read file and replace grid via id
             ObjectMapper mapper = new ObjectMapper();
             GridDto[] data = mapper.readValue(file, GridDto[].class);
-            data[gridDto.id.intValue()] = gridDto;
+            data[gridDto.getId().intValue()] = gridDto;
             mapper.writeValue(file, data);
         } catch (IOException e) {
             throw new PersistenceException(e.getMessage(), e);
@@ -71,7 +70,7 @@ public class GridPersistence {
         return gridDto;
     }
 
-    public static Long[][] emptyArray() {
+    public Long[][] emptyArray() {
         Long[][] arr = new Long[n.intValue()][m.intValue()];
         for (int i = 0; i < arr.length; i++) {
             Arrays.fill(arr[i], 0L);

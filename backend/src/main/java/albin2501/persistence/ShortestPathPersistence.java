@@ -1,8 +1,10 @@
 package albin2501.persistence;
 
+import org.springframework.stereotype.Repository;
 import albin2501.entity.ShortestPathData;
 import albin2501.util.datatype.CustomGraph;
 
+@Repository
 public class ShortestPathPersistence {
     private CustomGraph currGraph; // volatile memory
 

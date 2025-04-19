@@ -3,21 +3,20 @@ package albin2501.persistence;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import albin2501.entity.TextArt;
 import albin2501.exception.PersistenceException;
 
 // TODO: Add database instead of .json file
-// TODO: Refactor - dependency injection instead of static class methods
 
+@Repository
 public class TextArtPersistence {
-    private static String fileName = "./src/main/java/albin2501/util/textArt.json";
+    private String fileName = "./src/main/java/albin2501/util/textArt.json";
 
-    public static TextArt[] getTextArt() {
+    public TextArt[] getTextArt() {
         try {
             TextArt[] data = null;
             File file = new File(fileName);
@@ -38,13 +37,13 @@ public class TextArtPersistence {
         }
     }
 
-    public static TextArt postTextArt(String asciiArt, String name, Long width, Long height) {
+    public TextArt postTextArt(String asciiArt, String name, Long width, Long height) {
         // index 0 = newest
         try {
             TextArt[] currData = getTextArt();
             Long highestId = 0L;
             for (TextArt x : currData) {
-                highestId = highestId < x.id ? x.id : highestId;
+                highestId = highestId < x.getId() ? x.getId() : highestId;
             }
             TextArt textArt = new TextArt(asciiArt, ++highestId, name, LocalDateTime.now(), width, height);
             TextArt[] data = new TextArt[currData.length + 1];
@@ -65,7 +64,7 @@ public class TextArtPersistence {
         }
     }
 
-    public static boolean deleteTextArt() {
+    public boolean deleteTextArt() {
         try {
             File file = new File(fileName);
             ObjectMapper mapper = new ObjectMapper();
@@ -81,14 +80,14 @@ public class TextArtPersistence {
         }
     }
 
-    public static boolean deleteTextArtById(Long id) {
+    public boolean deleteTextArtById(Long id) {
         try {
             File file = new File(fileName);
 
             // Replace everything, but the deleted textArt
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
-            mapper.writeValue(file, Arrays.stream(getTextArt()).filter(x -> x.id != id).toArray(TextArt[]::new));
+            mapper.writeValue(file, Arrays.stream(getTextArt()).filter(x -> x.getId() != id).toArray(TextArt[]::new));
             
             return true;
         } catch (IOException e) {

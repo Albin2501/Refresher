@@ -3,12 +3,14 @@ package albin2501.entity;
 import java.time.LocalDateTime;
 
 public class TextArt {
-    public String art;
-    public Long id;
-    public String name;
-    public LocalDateTime time;
-    public Long width;
-    public Long height;
+    private String art;
+    private Long id;
+    private String name;
+    private LocalDateTime time;
+    private Long width;
+    private Long height;
+    
+    public TextArt() { }
 
     public TextArt(String art, Long id, String name, LocalDateTime time, Long width, Long height) {
         this.art = art;
@@ -21,7 +23,53 @@ public class TextArt {
         this.height = height;
     }
 
-    public TextArt() { }
+    public String getArt() {
+        return this.art;
+    }
+
+    public void setArt(String art) {
+        this.art = art;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDateTime getTime() {
+        return this.time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
+
+    public Long getWidth() {
+        return this.width;
+    }
+
+    public void setWidth(Long width) {
+        this.width = width;
+    }
+
+    public Long getHeight() {
+        return this.height;
+    }
+
+    public void setHeight(Long height) {
+        this.height = height;
+    }
 
     public String toString() {
         return (new StringBuilder("art: ").append(art).

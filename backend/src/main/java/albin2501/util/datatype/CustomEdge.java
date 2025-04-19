@@ -1,5 +1,7 @@
 package albin2501.util.datatype;
 
+import java.util.Objects;
+
 public class CustomEdge {
     private char start;
     private char end;
@@ -35,6 +37,20 @@ public class CustomEdge {
 
     public void setWeight(Long weight) {
         this.weight = weight;
+    }
+
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof CustomEdge)) {
+            return false;
+        }
+        CustomEdge customEdge = (CustomEdge) o;
+        return start == customEdge.start && end == customEdge.end;
+    }
+
+    public int hashCode() {
+        return Objects.hash(start, end);
     }
 
     public String toString() {
