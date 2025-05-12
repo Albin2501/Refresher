@@ -9,3 +9,7 @@ spring:
     multipart:
       max-file-size: 15MB
       max-request-size: 15MB
+  datasource:
+    url: jdbc:postgresql://localhost:${refresher_port}/refresher
+    username: '${refresher_username}'
+    password: '${refresher_password}'
