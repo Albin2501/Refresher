@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import albin2501.dto.textArt.ImageDto;
 import albin2501.dto.textArt.TextArtDto;
@@ -20,8 +21,6 @@ import albin2501.exception.ValidationException;
 import albin2501.service.TextArtService;
 import albin2501.util.Config;
 import albin2501.util.Mapper;
-
-// TODO: Mapper here, not in service
 
 @RestController
 @RequestMapping(path = TextArtEndpoint.url)
@@ -40,7 +39,8 @@ public class TextArtEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public TextArtDto[] getTextArt() {
         try {
-            return textArtService.getTextArt();
+            return Arrays.stream(textArtService.getTextArt()).
+                    map(x -> mapper.textArtToTextArtDto(x)).toArray(TextArtDto[]::new);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
@@ -54,7 +54,7 @@ public class TextArtEndpoint {
                 @RequestParam("height") Long height
             ) {
         try {
-            return textArtService.postTextArt(new ImageDto(image, width, height));
+            return mapper.textArtToTextArtDto(textArtService.postTextArt(new ImageDto(image, width, height)));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (ValidationException e) {

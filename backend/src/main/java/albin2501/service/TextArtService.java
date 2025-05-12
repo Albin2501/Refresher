@@ -1,15 +1,12 @@
 package albin2501.service;
 
-import java.util.Arrays;
 import javax.imageio.ImageIO;
 import org.springframework.stereotype.Service;
 import albin2501.dto.textArt.ImageDto;
-import albin2501.dto.textArt.TextArtDto;
 import albin2501.entity.TextArt;
 import albin2501.exception.PersistenceException;
 import albin2501.exception.ServiceException;
 import albin2501.persistence.TextArtPersistence;
-import albin2501.util.Mapper;
 import albin2501.util.Validator;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,18 +16,15 @@ import java.io.IOException;
 public class TextArtService {
     private TextArtPersistence textArtPersistence;
     private Validator validator;
-    private Mapper mapper;
 
-    public TextArtService(TextArtPersistence textArtPersistence, Validator validator, Mapper mapper) {
+    public TextArtService(TextArtPersistence textArtPersistence, Validator validator) {
         this.textArtPersistence = textArtPersistence;
         this.validator = validator;
-        this.mapper = mapper;
     }
 
-    public TextArtDto[] getTextArt() {
+    public TextArt[] getTextArt() {
         try {
-            return Arrays.stream(textArtPersistence.getTextArt()).
-                    map(x -> mapper.textArtToTextArtDto(x)).toArray(TextArtDto[]::new);
+            return textArtPersistence.getTextArt();
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
@@ -44,8 +38,7 @@ public class TextArtService {
         }
     }
 
-    @SuppressWarnings("null")
-    public TextArtDto postTextArt(ImageDto imageDto) {
+    public TextArt postTextArt(ImageDto imageDto) {
         try {
             validator.validateTextArt(imageDto);
 
@@ -86,12 +79,10 @@ public class TextArtService {
 
             String imageName = imageDto.image().getOriginalFilename();
 
-            return mapper.textArtToTextArtDto(
-                textArtPersistence.postTextArt(asciiArt.toString(),
+            return textArtPersistence.postTextArt(asciiArt.toString(),
                 imageName.length() < 32 ? imageName : 
                 (imageName.substring(0, 32) + "..."),
-                imageDto.width(), imageDto.height())
-            );
+                imageDto.width(), imageDto.height());
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         } catch (IOException e) {

@@ -12,6 +12,8 @@ import albin2501.persistence.GridPersistence;
 import albin2501.service.GridService;
 import albin2501.util.Validator;
 
+// TODO: dto <-> entity
+
 @Service
 public class GridService {
     private GridPersistence gridPersistence;

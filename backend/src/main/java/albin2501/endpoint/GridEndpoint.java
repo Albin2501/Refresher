@@ -19,6 +19,8 @@ import albin2501.exception.ValidationException;
 import albin2501.service.GridService;
 import albin2501.util.Config;
 
+// TODO: dto <-> entity
+
 @RestController
 @RequestMapping(path = GridEndpoint.url)
 @CrossOrigin(origins = Config.frontendBase) // CORS access control

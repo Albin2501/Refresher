@@ -2,11 +2,10 @@ package albin2501.util;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-
 import org.springframework.stereotype.Component;
-
 import albin2501.dto.grid.GridDataDto;
 import albin2501.dto.grid.GridSelectionDto;
+import albin2501.dto.shortestPath.ShortestPathDto;
 import albin2501.dto.textArt.ImageDto;
 import albin2501.entity.TextArt;
 import albin2501.exception.NotFoundException;
@@ -98,8 +97,15 @@ public class Validator {
         throw new ValidationException(message.toString());
     }
 
-    public void validateGraph(CustomGraph customGraph) {
-        if (customGraph == null)
-        throw new ValidationException("Graph needs to be generated first.");
+    public void validateShortestPathDto(CustomGraph graph, ShortestPathDto shortestPathDto) {
+        boolean start = false;
+        boolean end = false;
+        for (char name : graph.getNodes()) {
+            start = start || name == shortestPathDto.start();
+            end = end || name == shortestPathDto.end();
+        }
+
+        if (!start) throw new ValidationException("Starting node does not exist.");
+        if (!end) throw new ValidationException("Ending node does not exist.");
     }
 }

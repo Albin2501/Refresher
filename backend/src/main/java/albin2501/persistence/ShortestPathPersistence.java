@@ -2,6 +2,7 @@ package albin2501.persistence;
 
 import org.springframework.stereotype.Repository;
 import albin2501.entity.ShortestPathData;
+import albin2501.exception.PersistenceException;
 import albin2501.util.datatype.CustomGraph;
 
 @Repository
@@ -15,7 +16,8 @@ public class ShortestPathPersistence {
     }
 
     public CustomGraph getCurrGraph() {
-        return this.currGraph;
+        if (currGraph == null) throw new PersistenceException("Graph needs to be generated first.");
+        return currGraph;
     }
 
     public void setCurrGraph(CustomGraph currGraph) {
@@ -23,8 +25,6 @@ public class ShortestPathPersistence {
     }
 
     public ShortestPathData getShortestPathData() {
-        // TODO
-
         return null;
     }
 }

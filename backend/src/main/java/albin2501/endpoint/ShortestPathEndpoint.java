@@ -13,6 +13,7 @@ import albin2501.dto.shortestPath.ShortestPathDataDto;
 import albin2501.dto.shortestPath.ShortestPathDto;
 import albin2501.dto.shortestPath.ShortestPathResultDto;
 import albin2501.exception.ServiceException;
+import albin2501.exception.ValidationException;
 import albin2501.service.ShortestPathService;
 import albin2501.util.Config;
 import albin2501.util.Mapper;
@@ -54,16 +55,14 @@ public class ShortestPathEndpoint {
             return shortestPathService.getShortestPath(shortestPathDto);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
     }
 
     @GetMapping(value = "/data")
     @ResponseStatus(HttpStatus.OK)
     public ShortestPathDataDto getShortestPathData() {
-        try {
-            return mapper.shortestPathDataToShortestPathDataDto(shortestPathService.getShortestPathData());
-        } catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
-        }
+        return mapper.shortestPathDataToShortestPathDataDto(shortestPathService.getShortestPathData());
     }
 }
