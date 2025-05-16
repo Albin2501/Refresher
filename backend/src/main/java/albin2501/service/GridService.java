@@ -2,74 +2,79 @@ package albin2501.service;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import albin2501.dto.grid.GridDataDto;
-import albin2501.dto.grid.GridDto;
-import albin2501.dto.grid.GridSelectionDto;
+import albin2501.entity.Grid;
 import albin2501.exception.PersistenceException;
 import albin2501.exception.ServiceException;
-import albin2501.persistence.GridPersistence;
+import albin2501.repository.GridRepository;
 import albin2501.service.GridService;
 import albin2501.util.Validator;
 
-// TODO: dto <-> entity
-
 @Service
 public class GridService {
-    private GridPersistence gridPersistence;
+    private GridRepository gridRepository;
     private Validator validator;
 
-    public GridService(GridPersistence gridPersistence, Validator validator) {
-        this.gridPersistence = gridPersistence;
+    public GridService(GridRepository gridRepository, Validator validator) {
+        this.gridRepository = gridRepository;
         this.validator = validator;
     }
 
     public GridDataDto getGridData() {
         try {
-            return gridPersistence.getGridData();
+            Optional<Long[]> idsOptional = gridRepository.findAllIds();
+            Optional<Long[]> dimensionsOptional = gridRepository.findDimension(1L);
+
+            // validation
+            return new GridDataDto(dimensionsOptional.get()[0],
+                dimensionsOptional.get()[1], idsOptional.get());
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
 
-    public GridDto getGrid(Long id) {
+    public Grid getGrid(Long id) {
         try {
-            validator.validateGridId(id, getGridData());
-            return gridPersistence.getGrid(id);
+            Optional<Grid> gridOptional = gridRepository.findById(id);
+            validator.validateGrid(gridOptional);
+            return gridOptional.get();
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
 
-    public GridDto putGrid(GridSelectionDto gridSelectionDto) {
+    public Grid putGrid(Long id, Long[] pos1, Long[] pos2) {
         try {
-            validator.validateGridSelection(gridSelectionDto, getGridData());
-            GridDto gridDto = getGrid(gridSelectionDto.getId()); // file exists, well formatted and can be written to
+            Grid grid = getGrid(id);
+            GridDataDto gridDataDto = getGridData();
+            validator.validateGridSelection(pos1, pos2, gridDataDto.getN(), gridDataDto.getM());
 
             // Algorithm in O(3 * n * m) at worst
             // Make first position default and let it represent upper-left
-            if (gridSelectionDto.getPos1() == null && gridSelectionDto.getPos2() != null) {
-                gridSelectionDto.setPos1(gridSelectionDto.getPos2());
-                gridSelectionDto.setPos2(null);
-            } else if (gridSelectionDto.getPos1() != null && gridSelectionDto.getPos2() != null) {
+            if (pos1 == null && pos2 != null) {
+                pos1 = pos2;
+                pos2 = null;
+            } else if (pos1 != null && pos2 != null) {
                 // Point upper-left
-                Long[] ul = {Math.min(gridSelectionDto.getPos1()[0],
-                    gridSelectionDto.getPos2()[0]), Math.min(gridSelectionDto.getPos1()[1], gridSelectionDto.getPos2()[1])};
+                Long[] ul = {Math.min(pos1[0], pos2[0]),
+                    Math.min(pos1[1], pos2[1])};
                 // Point lower-right
-                Long[] lr = {Math.max(gridSelectionDto.getPos1()[0],
-                    gridSelectionDto.getPos2()[0]), Math.max(gridSelectionDto.getPos1()[1], gridSelectionDto.getPos2()[1])};
+                Long[] lr = {Math.max(pos1[0], pos2[0]),
+                    Math.max(pos1[1], pos2[1])};
 
-                gridSelectionDto.setPos1(ul);
-                gridSelectionDto.setPos2(lr);
+                pos1 = ul;
+                pos2 = lr;
             }
 
             // Get highest number to differentiate, overflow at Long.MAX_VALUE
             Long max = 0L;
 
-            for (int i = 0; i < gridDto.getGrid().length; i++) {
-                for (int j = 0; j < gridDto.getGrid()[i].length; j++) {
-                    if (max < gridDto.getGrid()[i][j])
-                    max = gridDto.getGrid()[i][j];
+            for (int i = 0; i < grid.getGrid().length; i++) {
+                for (int j = 0; j < grid.getGrid()[i].length; j++) {
+                    if (max < grid.getGrid()[i][j])
+                    max = grid.getGrid()[i][j];
                 }
             }
 
@@ -77,13 +82,13 @@ public class GridService {
             Queue<int[]> queue = new LinkedList<>();
             max++;
 
-            if (gridSelectionDto.getPos2() == null) {
-                gridDto.getGrid()[gridSelectionDto.getPos1()[0].intValue()][gridSelectionDto.getPos1()[1].intValue()] = max;
-                queue.add(new int[]{gridSelectionDto.getPos1()[0].intValue(), gridSelectionDto.getPos1()[1].intValue()});
+            if (pos2 == null) {
+                grid.getGrid()[pos1[0].intValue()][pos1[1].intValue()] = max;
+                queue.add(new int[]{pos1[0].intValue(), pos1[1].intValue()});
             } else {
-                for (int i = gridSelectionDto.getPos1()[0].intValue(); i <= gridSelectionDto.getPos2()[0].intValue(); i++) {
-                    for (int j = gridSelectionDto.getPos1()[1].intValue(); j <= gridSelectionDto.getPos2()[1].intValue(); j++) {
-                        gridDto.getGrid()[i][j] = max;
+                for (int i = pos1[0].intValue(); i <= pos2[0].intValue(); i++) {
+                    for (int j = pos1[1].intValue(); j <= pos2[1].intValue(); j++) {
+                        grid.getGrid()[i][j] = max;
                         queue.add(new int[]{i,j});
                     }
                 }
@@ -100,27 +105,29 @@ public class GridService {
                     int ni = i + d[0];
                     int nj = j + d[1];
             
-                    if (ni >= 0 && ni < gridDto.getGrid().length && nj >= 0 && nj < gridDto.getGrid()[i].length) {
-                        Long nx = gridDto.getGrid()[ni][nj], curr = gridDto.getGrid()[i][j];
+                    if (ni >= 0 && ni < grid.getGrid().length && nj >= 0 && nj < grid.getGrid()[i].length) {
+                        Long nx = grid.getGrid()[ni][nj], curr = grid.getGrid()[i][j];
             
                         if (nx != 0 && nx < curr) {
-                            gridDto.getGrid()[ni][nj] = curr;
+                            grid.getGrid()[ni][nj] = curr;
                             queue.add(new int[]{ni, nj});
                         }
                     }
                 }
             }
 
-            return gridPersistence.putGrid(gridDto);
+            return gridRepository.save(grid);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
 
-    public GridDto clearGrid(Long id) {
+    public Grid clearGrid(Long id) {
         try {
-            validator.validateGridId(id, getGridData());
-            return gridPersistence.putGrid(new GridDto(id, gridPersistence.emptyArray()));
+            Grid grid = getGrid(id);
+            Long[][] emptyArray = new Long[grid.getGrid().length][grid.getGrid()[0].length];
+            grid.setGrid(emptyArray);
+            return gridRepository.save(grid);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }

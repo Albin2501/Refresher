@@ -5,6 +5,8 @@ import albin2501.entity.ShortestPathData;
 import albin2501.exception.PersistenceException;
 import albin2501.util.datatype.CustomGraph;
 
+// TODO: Add database instead of .json file
+
 @Repository
 public class ShortestPathPersistence {
     private CustomGraph currGraph; // volatile memory

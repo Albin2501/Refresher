@@ -3,49 +3,44 @@ package albin2501.util;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import org.springframework.stereotype.Component;
-import albin2501.dto.grid.GridDataDto;
-import albin2501.dto.grid.GridSelectionDto;
 import albin2501.dto.shortestPath.ShortestPathDto;
 import albin2501.dto.textArt.ImageDto;
+import albin2501.entity.Grid;
 import albin2501.entity.TextArt;
 import albin2501.exception.NotFoundException;
 import albin2501.exception.ValidationException;
 import albin2501.util.datatype.CustomGraph;
-
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class Validator {
 
     public Validator() { }
 
-    public void validateGridId(Long id, GridDataDto gridDataDto) {
-        for (Long x : gridDataDto.ids()) {
-            if (id == x) return;
-        }
-        throw new NotFoundException("Grid not found.");
+    public void validateGrid(Optional<Grid> gridOptional) {
+        if (!gridOptional.isPresent()) throw new NotFoundException("Grid not found.");
     }
 
-    public void validateGridSelection(GridSelectionDto gridSelectionDto, GridDataDto gridDataDto) {
-        validateGridId(gridSelectionDto.getId(), gridDataDto);
+    public void validateGridSelection(Long[] pos1, Long[] pos2, Long n, Long m) {
         StringBuilder message = new StringBuilder("");
 
         // Sanitize user input
-        if ((gridSelectionDto.getPos1() == null && gridSelectionDto.getPos1() == null) ||
-            (gridSelectionDto.getPos1() != null && gridSelectionDto.getPos1().length != 2) ||
-            (gridSelectionDto.getPos2() != null && gridSelectionDto.getPos2().length != 2) ||
-            (gridSelectionDto.getPos1() != null && (gridSelectionDto.getPos1()[0] == null || gridSelectionDto.getPos1()[1] == null)) ||
-            (gridSelectionDto.getPos2() != null && (gridSelectionDto.getPos2()[0] == null || gridSelectionDto.getPos2()[1] == null)))
+        if ((pos1 == null && pos1 == null) ||
+            (pos1 != null && pos1.length != 2) ||
+            (pos2 != null && pos2.length != 2) ||
+            (pos1 != null && (pos1[0] == null || pos1[1] == null)) ||
+            (pos2 != null && pos2[0] == null || pos2[1] == null))
         throw new ValidationException("Selection not well formatted.");
 
-        if (gridSelectionDto.getPos1() != null &&
-            ((gridSelectionDto.getPos1()[0] < 0 || gridSelectionDto.getPos1()[0] >= gridDataDto.n()) ||
-            (gridSelectionDto.getPos1()[1] < 0 || gridSelectionDto.getPos1()[1] >= gridDataDto.m())))
+        if (pos1 != null &&
+            ((pos1[0] < 0 || pos1[0] >= n) ||
+            (pos1[1] < 0 || pos1[1] >= m)))
         message.append("First selected point out of bounds.");
 
-        if (gridSelectionDto.getPos2() != null &&
-            ((gridSelectionDto.getPos2()[0] < 0 || gridSelectionDto.getPos2()[0] >= gridDataDto.n()) ||
-            (gridSelectionDto.getPos2()[1] < 0 || gridSelectionDto.getPos2()[1] >= gridDataDto.m())))
+        if (pos2 != null &&
+            ((pos2[0] < 0 || pos2[0] >= n) ||
+            (pos2[1] < 0 || pos2[1] >= m)))
         message.append(message.length() > 0 ? " " : "").append("Second selected point out of bounds.");
 
         if (message.length() > 0)

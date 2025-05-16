@@ -18,8 +18,7 @@ import albin2501.exception.ServiceException;
 import albin2501.exception.ValidationException;
 import albin2501.service.GridService;
 import albin2501.util.Config;
-
-// TODO: dto <-> entity
+import albin2501.util.Mapper;
 
 @RestController
 @RequestMapping(path = GridEndpoint.url)
@@ -27,9 +26,11 @@ import albin2501.util.Config;
 public class GridEndpoint {
     final static String url = "/grid";
     private GridService gridService;
+    private Mapper mapper;
 
-    public GridEndpoint(GridService gridService) {
+    public GridEndpoint(GridService gridService, Mapper mapper) {
         this.gridService = gridService;
+        this.mapper = mapper;
     }
 
     @GetMapping(value = "/data")
@@ -46,7 +47,7 @@ public class GridEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public GridDto getGrid(@PathVariable("id") Long id) {
         try {
-            return gridService.getGrid(id);
+            return mapper.gridToGridDto(gridService.getGrid(id));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {
@@ -58,8 +59,7 @@ public class GridEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public GridDto putGrid(@PathVariable("id") Long id, @RequestBody GridSelectionDto gridSelectionDto) {
         try {
-            gridSelectionDto.setId(id);
-            return gridService.putGrid(gridSelectionDto);
+            return mapper.gridToGridDto(gridService.putGrid(id, gridSelectionDto.getPos1(), gridSelectionDto.getPos2()));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {
@@ -73,7 +73,7 @@ public class GridEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public GridDto clearGrid(@PathVariable("id") Long id) throws Exception {
         try {
-            return gridService.clearGrid(id);
+            return mapper.gridToGridDto(gridService.clearGrid(id));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {

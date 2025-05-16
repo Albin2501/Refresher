@@ -3,13 +3,16 @@ server:
 logging:
   level:
     root: WARN
-    org.springframework: WARN
+    org:
+      springframework: WARN
 spring:
   servlet:
     multipart:
       max-file-size: 15MB
       max-request-size: 15MB
   datasource:
-    url: jdbc:postgresql://localhost:${refresher_port}/refresher
-    username: '${refresher_username}'
-    password: '${refresher_password}'
+    url: jdbc:postgresql://localhost:${REFRESHER_PORT}/refresher
+    username: '${REFRESHER_USERNAME}'
+    password: '${REFRESHER_PASSWORD}'
+  jpa:
+    open-in-view: true

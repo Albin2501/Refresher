@@ -1,6 +1,6 @@
 package albin2501.dto.grid;
 
-import java.util.Arrays;
+import java.util.Objects;
 
 public class GridDto {
     private Long id;
@@ -29,8 +29,38 @@ public class GridDto {
         this.grid = grid;
     }
 
+
+    public GridDto id(Long id) {
+        setId(id);
+        return this;
+    }
+
+    public GridDto grid(Long[][] grid) {
+        setGrid(grid);
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof GridDto)) {
+            return false;
+        }
+        GridDto gridDto = (GridDto) o;
+        return Objects.equals(id, gridDto.id) && Objects.equals(grid, gridDto.grid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, grid);
+    }
+
+    @Override
     public String toString() {
-        return new StringBuilder("id: ").append(id).append('\n').
-        append("grid: ").append(Arrays.deepToString(grid)).toString();
+        return "{" +
+            " id='" + getId() + "'" +
+            ", grid='" + getGrid() + "'" +
+            "}";
     }
 }
