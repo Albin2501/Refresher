@@ -22,6 +22,10 @@ public class Validator {
         if (!gridOptional.isPresent()) throw new NotFoundException("Grid not found.");
     }
 
+    public void validateGrids(Optional<Long[]> idsOptional) {
+        if (!idsOptional.isPresent()) throw new NotFoundException("No grids exist.");
+    }
+
     public void validateGridSelection(Long[] pos1, Long[] pos2, Long n, Long m) {
         StringBuilder message = new StringBuilder("");
 

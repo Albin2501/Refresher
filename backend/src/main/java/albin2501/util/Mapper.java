@@ -12,7 +12,7 @@ import albin2501.entity.TextArt;
 public class Mapper {
 
     public GridDto gridToGridDto(Grid grid) {
-        return new GridDto(grid.getId(), grid.getGrid());
+        return new GridDto(grid.getId(), grid.getGridCellsAsArray());
     }
 
     public TextArt textArtDtoToTextArt(TextArtDto textArtDto) {

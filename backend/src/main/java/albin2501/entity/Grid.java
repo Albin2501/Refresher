@@ -1,34 +1,59 @@
 package albin2501.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.Column;
+
+import albin2501.util.Datagenerator;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 
 @Entity
 public class Grid {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "grid_seq")
+    @SequenceGenerator(name = "grid_seq", sequenceName = "grid_seq", allocationSize = 1)
     private Long id;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String grid; // TODO: two-dimensional array not correctly mapped, workaround
+    @OneToMany(mappedBy = "grid", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GridCell> gridCells;
+    
+    public Long[][] getGridCellsAsArray() {
+        Long[][] result = new Long[Datagenerator.n.intValue()][Datagenerator.m.intValue()];
+        for (GridCell cell : gridCells) {
+            result[cell.getRowIndex()][cell.getColIndex()] = cell.getValue();
+        }
+        
+        return result;
+    }
+
+    public void setGridCellsFromArray(Long[][] array) {
+        if (gridCells == null) gridCells = new ArrayList<>();
+        gridCells.clear();
+
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[i].length; j++) {
+                GridCell gridCell = new GridCell();
+                gridCell.setGrid(this);
+                gridCell.setRowIndex(i);
+                gridCell.setColIndex(j);
+                gridCell.setValue(array[i][j]);
+                gridCells.add(gridCell);
+            }
+        }
+    }
 
     public Grid() { }
 
-    public Grid(Long id, Long[][] grid) {
+    public Grid(Long id, List<GridCell> gridCells) {
         this.id = id;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            this.grid = mapper.writeValueAsString(grid);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to serialize cells to JSON", e);
-        }
+        this.gridCells = gridCells;
     }
 
     public Long getId() {
@@ -39,42 +64,21 @@ public class Grid {
         this.id = id;
     }
 
-    public Long[][] getGrid() {
-        // TODO
-        if (grid == null || grid.isBlank()) return new Long[0][0];
-
-        try {
-            // Use Jackson or another JSON parser (recommended)
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(grid, Long[][].class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to parse cells JSON", e);
-        }
+    public List<GridCell> getGridCells() {
+        return this.gridCells;
     }
 
-    public void setGrid(Long[][] grid) {
-        // TODO
-        if (grid == null) {
-            this.grid = null;
-            return;
-        }
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            this.grid = mapper.writeValueAsString(grid);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to serialize cells to JSON", e);
-        }
+    public void setGridCells(List<GridCell> gridCells) {
+        this.gridCells = gridCells;
     }
-
 
     public Grid id(Long id) {
         setId(id);
         return this;
     }
 
-    public Grid grid(Long[][] grid) {
-        setGrid(grid);
+    public Grid gridCells(List<GridCell> gridCells) {
+        setGridCells(gridCells);
         return this;
     }
 
@@ -86,19 +90,19 @@ public class Grid {
             return false;
         }
         Grid grid = (Grid) o;
-        return Objects.equals(id, grid.id) && Objects.equals(grid, grid.grid);
+        return Objects.equals(id, grid.id) && Objects.equals(gridCells, grid.gridCells);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, grid);
+        return Objects.hash(id, gridCells);
     }
 
     @Override
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
-            ", grid='" + getGrid() + "'" +
+            ", gridCells='" + getGridCells() + "'" +
             "}";
     }
 }

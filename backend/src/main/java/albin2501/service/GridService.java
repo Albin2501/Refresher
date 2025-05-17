@@ -1,6 +1,5 @@
 package albin2501.service;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Optional;
@@ -11,6 +10,7 @@ import albin2501.exception.PersistenceException;
 import albin2501.exception.ServiceException;
 import albin2501.repository.GridRepository;
 import albin2501.service.GridService;
+import albin2501.util.Datagenerator;
 import albin2501.util.Validator;
 
 @Service
@@ -26,11 +26,8 @@ public class GridService {
     public GridDataDto getGridData() {
         try {
             Optional<Long[]> idsOptional = gridRepository.findAllIds();
-            Optional<Grid> gridOptional = gridRepository.findById(idsOptional.get()[0]);
-
-            // TODO: validation
-            return new GridDataDto((long) gridOptional.get().getGrid().length,
-                (long) gridOptional.get().getGrid()[0].length, idsOptional.get());
+            validator.validateGrids(idsOptional);
+            return new GridDataDto(Datagenerator.n, Datagenerator.m, idsOptional.get());
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
@@ -49,6 +46,7 @@ public class GridService {
     public Grid putGrid(Long id, Long[] pos1, Long[] pos2) {
         try {
             Grid grid = getGrid(id);
+            Long[][] gridCells = grid.getGridCellsAsArray();
             GridDataDto gridDataDto = getGridData();
             validator.validateGridSelection(pos1, pos2, gridDataDto.getN(), gridDataDto.getM());
 
@@ -72,16 +70,15 @@ public class GridService {
             // Get highest number to differentiate, overflow at Long.MAX_VALUE
             Long max = 0L;
 
-            for (int i = 0; i < grid.getGrid().length; i++) {
-                for (int j = 0; j < grid.getGrid()[i].length; j++) {
-                    if (max < grid.getGrid()[i][j])
-                    max = grid.getGrid()[i][j];
+            for (int i = 0; i < gridCells.length; i++) {
+                for (int j = 0; j < gridCells[i].length; j++) {
+                    if (max < gridCells[i][j])
+                    max = gridCells[i][j];
                 }
             }
 
             // Change grid with new input and enqueue all cells that are max
             Queue<int[]> queue = new LinkedList<>();
-            Long[][] gridCells = grid.getGrid();
             max++;
 
             if (pos2 == null) {
@@ -118,7 +115,7 @@ public class GridService {
                 }
             }
 
-            grid.setGrid(gridCells);
+            grid.setGridCellsFromArray(gridCells);
             return gridRepository.save(grid);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -128,13 +125,13 @@ public class GridService {
     public Grid clearGrid(Long id) {
         try {
             Grid grid = getGrid(id);
-            Long[][] emptyArray = new Long[grid.getGrid().length][grid.getGrid()[0].length];
+            Long[][] emptyArray = new Long[Datagenerator.n.intValue()][Datagenerator.m.intValue()];
             for (int i = 0; i < emptyArray.length; i++) {
                 for (int j = 0; j < emptyArray[i].length; j++) {
                     emptyArray[i][j] = 0L;
                 }
             }
-            grid.setGrid(emptyArray);
+            grid.setGridCellsFromArray(emptyArray);
             return gridRepository.save(grid);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
