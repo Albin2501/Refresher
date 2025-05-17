@@ -46,7 +46,6 @@ public class GridService {
     public Grid putGrid(Long id, Long[] pos1, Long[] pos2) {
         try {
             Grid grid = getGrid(id);
-            Long[][] gridCells = grid.getGridCellsAsArray();
             GridDataDto gridDataDto = getGridData();
             validator.validateGridSelection(pos1, pos2, gridDataDto.getN(), gridDataDto.getM());
 
@@ -70,10 +69,10 @@ public class GridService {
             // Get highest number to differentiate, overflow at Long.MAX_VALUE
             Long max = 0L;
 
-            for (int i = 0; i < gridCells.length; i++) {
-                for (int j = 0; j < gridCells[i].length; j++) {
-                    if (max < gridCells[i][j])
-                    max = gridCells[i][j];
+            for (int i = 0; i < Datagenerator.n; i++) {
+                for (int j = 0; j < Datagenerator.m; j++) {
+                    Long curr = grid.getGridCellValue(i, j);
+                    max = max < curr ? curr : max;
                 }
             }
 
@@ -82,12 +81,12 @@ public class GridService {
             max++;
 
             if (pos2 == null) {
-                gridCells[pos1[0].intValue()][pos1[1].intValue()] = max;
+                grid.setGridCellValue(pos1[0].intValue(), pos1[1].intValue(), max);
                 queue.add(new int[]{pos1[0].intValue(), pos1[1].intValue()});
             } else {
                 for (int i = pos1[0].intValue(); i <= pos2[0].intValue(); i++) {
                     for (int j = pos1[1].intValue(); j <= pos2[1].intValue(); j++) {
-                        gridCells[i][j] = max;
+                        grid.setGridCellValue(i, j, max);
                         queue.add(new int[]{i,j});
                     }
                 }
@@ -104,18 +103,18 @@ public class GridService {
                     int ni = i + d[0];
                     int nj = j + d[1];
             
-                    if (ni >= 0 && ni < gridCells.length && nj >= 0 && nj < gridCells[i].length) {
-                        Long nx = gridCells[ni][nj], curr = gridCells[i][j];
+                    if (ni >= 0 && ni < Datagenerator.n && nj >= 0 && nj < Datagenerator.m) {
+                        Long nx = grid.getGridCellValue(ni, nj);
+                        Long curr = grid.getGridCellValue(i, j);;
             
                         if (nx != 0 && nx < curr) {
-                            gridCells[ni][nj] = curr;
+                            grid.setGridCellValue(ni, nj, curr);
                             queue.add(new int[]{ni, nj});
                         }
                     }
                 }
             }
 
-            grid.setGridCellsFromArray(gridCells);
             return gridRepository.save(grid);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -131,7 +130,8 @@ public class GridService {
                     emptyArray[i][j] = 0L;
                 }
             }
-            grid.setGridCellsFromArray(emptyArray);
+
+            grid.resetGridCells();
             return gridRepository.save(grid);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);

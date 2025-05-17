@@ -24,6 +24,12 @@ public class Grid {
     @OneToMany(mappedBy = "grid", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GridCell> gridCells;
     
+    public Long getGridCellValue(int i, int j) {
+        return gridCells.stream().filter(x -> 
+            x.getRowIndex() == i && x.getColIndex() == j
+        ).findFirst().get().getValue();
+    }
+
     public Long[][] getGridCellsAsArray() {
         Long[][] result = new Long[Datagenerator.n.intValue()][Datagenerator.m.intValue()];
         for (GridCell cell : gridCells) {
@@ -31,6 +37,20 @@ public class Grid {
         }
         
         return result;
+    }
+
+    public void setGridCellValue(int i, int j, Long value) {
+        gridCells.stream().filter(x -> 
+            x.getRowIndex() == i && x.getColIndex() == j
+        ).findFirst().get().setValue(value);;
+    }
+
+    public void resetGridCells() {
+        if (gridCells != null) {
+            gridCells.stream().forEach(x -> 
+                x.setValue(0L)
+            );
+        }
     }
 
     public void setGridCellsFromArray(Long[][] array) {
