@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import albin2501.util.Datagenerator;
+import albin2501.util.DataGenerator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +31,7 @@ public class Grid {
     }
 
     public Long[][] getGridCellsAsArray() {
-        Long[][] result = new Long[Datagenerator.n.intValue()][Datagenerator.m.intValue()];
+        Long[][] result = new Long[DataGenerator.n.intValue()][DataGenerator.m.intValue()];
         for (GridCell cell : gridCells) {
             result[cell.getRowIndex()][cell.getColIndex()] = cell.getValue();
         }

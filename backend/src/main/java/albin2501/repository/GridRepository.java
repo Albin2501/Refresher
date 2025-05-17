@@ -8,10 +8,6 @@ import albin2501.entity.Grid;
 
 @Repository
 public interface GridRepository extends JpaRepository<Grid, Long> {
-
     @Query("SELECT g.id FROM Grid g")
     Optional<Long[]> findAllIds();
-
-    @Override
-    Optional<Grid> findById(Long id);
 }

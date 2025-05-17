@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service;
 import albin2501.dto.shortestPath.ShortestPathDto;
 import albin2501.dto.shortestPath.ShortestPathResultDto;
 import albin2501.entity.ShortestPathData;
-import albin2501.exception.PersistenceException;
 import albin2501.exception.ServiceException;
-import albin2501.persistence.ShortestPathPersistence;
+import albin2501.repository.ShortestPathPersistence;
 import albin2501.util.Validator;
 import albin2501.util.datatype.CustomEdge;
 import albin2501.util.datatype.CustomGraph;
@@ -57,7 +56,7 @@ public class ShortestPathService {
 
             shortestPathPersistence.setCurrGraph(new CustomGraph(nodes, edges));
             return shortestPathPersistence.getCurrGraph();
-        } catch (PersistenceException e) {
+        } catch (Exception /*PersistenceException*/ e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
@@ -100,7 +99,7 @@ public class ShortestPathService {
             */
 
             return null;
-        } catch (PersistenceException e) {
+        } catch (Exception /*PersistenceException*/ e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }

@@ -15,10 +15,6 @@ public class Mapper {
         return new GridDto(grid.getId(), grid.getGridCellsAsArray());
     }
 
-    public TextArt textArtDtoToTextArt(TextArtDto textArtDto) {
-        return new TextArt(textArtDto.art(), null, null, null, textArtDto.width(), textArtDto.height());
-    }
-
     public TextArtDto textArtToTextArtDto(TextArt textArt) {
         return new TextArtDto(textArt.getArt(), textArt.getId(), textArt.getName(),
             textArt.getTime(), textArt.getWidth(), textArt.getHeight());

@@ -1,19 +1,10 @@
 package albin2501.endpoint;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
-import albin2501.dto.textArt.ImageDto;
 import albin2501.dto.textArt.TextArtDto;
 import albin2501.exception.NotFoundException;
 import albin2501.exception.ServiceException;
@@ -54,7 +45,7 @@ public class TextArtEndpoint {
                 @RequestParam("height") Long height
             ) {
         try {
-            return mapper.textArtToTextArtDto(textArtService.postTextArt(new ImageDto(image, width, height)));
+            return mapper.textArtToTextArtDto(textArtService.postTextArt(image, width, height));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (ValidationException e) {

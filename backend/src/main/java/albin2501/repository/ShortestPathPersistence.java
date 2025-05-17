@@ -1,8 +1,7 @@
-package albin2501.persistence;
+package albin2501.repository;
 
 import org.springframework.stereotype.Repository;
 import albin2501.entity.ShortestPathData;
-import albin2501.exception.PersistenceException;
 import albin2501.util.datatype.CustomGraph;
 
 // TODO: Add database instead of .json file
@@ -18,7 +17,7 @@ public class ShortestPathPersistence {
     }
 
     public CustomGraph getCurrGraph() {
-        if (currGraph == null) throw new PersistenceException("Graph needs to be generated first.");
+        //if (currGraph == null) throw new PersistenceException("Graph needs to be generated first.");
         return currGraph;
     }
 

@@ -6,13 +6,13 @@ import albin2501.entity.Grid;
 import albin2501.repository.GridRepository;
 
 @Component
-public class Datagenerator implements CommandLineRunner {
+public class DataGenerator implements CommandLineRunner {
     private GridRepository gridRepository;
     public static Long n = 25L; // # of rows
     public static Long m = 50L; // # of columns
     public static Long g = 3L; // # of grids
     
-    public Datagenerator(GridRepository gridRepository) {
+    public DataGenerator(GridRepository gridRepository) {
         this.gridRepository = gridRepository;
     }
 

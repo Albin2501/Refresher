@@ -3,8 +3,9 @@ package albin2501.util;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
 import albin2501.dto.shortestPath.ShortestPathDto;
-import albin2501.dto.textArt.ImageDto;
 import albin2501.entity.Grid;
 import albin2501.entity.TextArt;
 import albin2501.exception.NotFoundException;
@@ -58,35 +59,35 @@ public class Validator {
         throw new NotFoundException("TextArt not found.");
     }
 
-    public void validateTextArt(ImageDto imageDto) {
+    public void validateTextArt(MultipartFile image, Long width, Long height) {
         StringBuilder message = new StringBuilder("");
 
-        if (imageDto.image() == null || imageDto.width() == null || imageDto.height() == null)
+        if (image == null || width == null || height == null)
         throw new ValidationException("Image not well formatted.");
 
-        if (imageDto.width() < 1)
+        if (width < 1)
         message.append("Width must be at least 1 character wide.");
 
-        if (imageDto.width() > 256)
+        if (width > 256)
         message.append(message.length() > 0 ? " " : "").append("Width must be at most 256 characters wide.");
 
-        if (imageDto.height() < 1)
+        if (height < 1)
         message.append("Height must be at least 1 character wide.");
 
         // since chars are approximately twice as tall as they are wide, the height needs to be halved
         // so that the image is square if 1:1=width:height
-        if (imageDto.height() > 128)
+        if (height > 128)
         message.append(message.length() > 0 ? " " : "").append("Height must be at most 128 characters wide.");
 
-        if (imageDto.image().isEmpty())
+        if (image.isEmpty())
         message.append(message.length() > 0 ? " " : "").append("File is empty.");
 
-        if (imageDto.image().getOriginalFilename() == null)
+        if (image.getOriginalFilename() == null)
         message.append(message.length() > 0 ? " " : "").append("File name must be set.");
 
         try {
-            BufferedImage image = ImageIO.read(imageDto.image().getInputStream());
-            if (image == null)
+            BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
+            if (bufferedImage == null)
             message.append(message.length() > 0 ? " " : "").append("Image is not valid.");
         } catch (IOException e) {
             message.append(message.length() > 0 ? " " : "").append("Image can't be read.");
