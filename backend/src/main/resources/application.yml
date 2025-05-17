@@ -16,3 +16,5 @@ spring:
     password: '${REFRESHER_PASSWORD}'
   jpa:
     open-in-view: true
+    hibernate:
+      ddl-auto: update
