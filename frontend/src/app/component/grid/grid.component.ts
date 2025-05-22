@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { GridService } from '../../service/grid/grid.service';
-import { GridDataDto } from '../../dto/GridDataDto';
-import { GridDto } from '../../dto/GridDto';
-import { GridSelectionDto } from '../../dto/GridSelectionDto';
+import { GridDataDto } from '../../dto/grid/GridDataDto';
+import { GridDto } from '../../dto/grid/GridDto';
+import { GridSelectionDto } from '../../dto/grid/GridSelectionDto';
 import { CommonModule } from '@angular/common';
 
 @Component({

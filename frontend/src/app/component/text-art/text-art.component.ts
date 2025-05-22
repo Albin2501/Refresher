@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TextArtService } from '../../service/textArt/text-art.service';
-import { TextArtDto } from '../../dto/TextArtDto';
-import { ImageDto } from '../../dto/ImageDto';
+import { TextArtDto } from '../../dto/textArt/TextArtDto';
+import { ImageDto } from '../../dto/textArt/ImageDto';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 

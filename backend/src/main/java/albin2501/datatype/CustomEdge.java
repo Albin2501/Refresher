@@ -1,4 +1,4 @@
-package albin2501.util.datatype;
+package albin2501.datatype;
 
 import java.util.Objects;
 
@@ -39,6 +39,22 @@ public class CustomEdge {
         this.weight = weight;
     }
 
+    public CustomEdge start(char start) {
+        setStart(start);
+        return this;
+    }
+
+    public CustomEdge end(char end) {
+        setEnd(end);
+        return this;
+    }
+
+    public CustomEdge weight(Long weight) {
+        setWeight(weight);
+        return this;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == this)
             return true;
@@ -46,16 +62,20 @@ public class CustomEdge {
             return false;
         }
         CustomEdge customEdge = (CustomEdge) o;
-        return start == customEdge.start && end == customEdge.end;
+        return start == customEdge.start && end == customEdge.end && Objects.equals(weight, customEdge.weight);
     }
 
+    @Override
     public int hashCode() {
-        return Objects.hash(start, end);
+        return Objects.hash(start, end, weight);
     }
 
+    @Override
     public String toString() {
-        return (new StringBuilder("start: ").append(start).append("\n").
-        append("end: ").append(end).append("\n").
-        append("weight: ").append(weight)).toString();
+        return "{" +
+            " start='" + getStart() + "'" +
+            ", end='" + getEnd() + "'" +
+            ", weight='" + getWeight() + "'" +
+            "}";
     }
 }

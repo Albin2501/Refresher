@@ -14,12 +14,14 @@ export class HeaderComponent {
   menuItem: string[] = [
     'REFRESHER',
     'GRID',
-    'TEXTART'
+    'TEXTART',
+    'PATH'
   ];
   menuItemLink: string[] = [
     '',
     '/grid',
-    '/textArt'
+    '/textArt',
+    '/shortestPath'
   ];
   activeItem: boolean[] = [];
 

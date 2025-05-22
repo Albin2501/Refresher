@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { backendBase } from '../../util/config';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { TextArtDto } from '../../dto/TextArtDto';
-import { ImageDto } from '../../dto/ImageDto';
+import { TextArtDto } from '../../dto/textArt/TextArtDto';
+import { ImageDto } from '../../dto/textArt/ImageDto';
 
 @Injectable({
   providedIn: 'root'

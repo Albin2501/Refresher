@@ -3,15 +3,16 @@ package albin2501.endpoint;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+
+import albin2501.datatype.CustomEdge;
+import albin2501.datatype.CustomGraph;
 import albin2501.dto.shortestPath.ShortestPathDataDto;
 import albin2501.dto.shortestPath.ShortestPathDto;
-import albin2501.dto.shortestPath.ShortestPathResultDto;
 import albin2501.exception.ServiceException;
 import albin2501.exception.ValidationException;
 import albin2501.service.ShortestPathService;
 import albin2501.util.Config;
 import albin2501.util.Mapper;
-import albin2501.util.datatype.CustomGraph;
 
 @RestController
 @RequestMapping(path = ShortestPathEndpoint.url)
@@ -30,21 +31,17 @@ public class ShortestPathEndpoint {
     // The shortest path between a given start- and endpoint will be calculated 
     // using different algorithms in an asynchronous fashion.
     // Color the shortest path in the graph and display meta data about the calculations.
-    // Use a SQL database (via JDBC) to persist average meta data about the calculations.
+    // Meta data about the calculations are also persisted and can be retrieved.
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public CustomGraph getRandomGraph() {
-        try {
-            return shortestPathService.getRandomGraph();
-        } catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
-        }
+        return shortestPathService.getRandomGraph();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ShortestPathResultDto getShortestPath(@RequestBody ShortestPathDto shortestPathDto) {
+    public CustomEdge[] getShortestPath(@RequestBody ShortestPathDto shortestPathDto) {
         try {
             return shortestPathService.getShortestPath(shortestPathDto);
         } catch (ServiceException e) {

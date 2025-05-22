@@ -13,10 +13,13 @@ public class GridCell {
     @ManyToOne(fetch = FetchType.LAZY)
     private Grid grid;
 
+    @Column(nullable = false)
     private int rowIndex;
 
+    @Column(nullable = false)
     private int colIndex;
 
+    @Column(nullable = false)
     private Long value;
 
     public GridCell() { }

@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { backendBase } from '../../util/config';
-import { GridDto } from '../../dto/GridDto';
-import { GridSelectionDto } from '../../dto/GridSelectionDto';
+import { GridDto } from '../../dto/grid/GridDto';
+import { GridSelectionDto } from '../../dto/grid/GridSelectionDto';
 import { Observable } from 'rxjs';
-import { GridDataDto } from '../../dto/GridDataDto';
+import { GridDataDto } from '../../dto/grid/GridDataDto';
 
 @Injectable({
   providedIn: 'root'

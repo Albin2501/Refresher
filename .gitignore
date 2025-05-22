@@ -9,5 +9,3 @@
 ### Backend ###
 /backend/.vscode
 /backend/target
-/backend/src/main/java/albin2501/util/grid.json
-/backend/src/main/java/albin2501/util/textArt.json

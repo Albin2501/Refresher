@@ -1,81 +1,73 @@
 package albin2501.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
+
+import albin2501.datatype.CustomEdge;
+import albin2501.datatype.CustomGraph;
+import albin2501.datatype.ShortestPathData;
 import albin2501.dto.shortestPath.ShortestPathDto;
-import albin2501.dto.shortestPath.ShortestPathResultDto;
-import albin2501.entity.ShortestPathData;
 import albin2501.exception.ServiceException;
-import albin2501.repository.ShortestPathPersistence;
+import albin2501.repository.ShortestPathDataRepository;
 import albin2501.util.Validator;
-import albin2501.util.datatype.CustomEdge;
-import albin2501.util.datatype.CustomGraph;
 
 @Service
 public class ShortestPathService {
-    private final ShortestPathPersistence shortestPathPersistence;
+    private CustomGraph currGraph; 
+    private final ShortestPathDataRepository shortestPathDataRepository;
     private final Validator validator;
 
-    public ShortestPathService(ShortestPathPersistence shortestPathPersistence, Validator validator) {
-        this.shortestPathPersistence = shortestPathPersistence;
+    public ShortestPathService(ShortestPathDataRepository shortestPathDataRepository, Validator validator) {
+        this.shortestPathDataRepository = shortestPathDataRepository;
         this.validator = validator;
     }
 
     public CustomGraph getRandomGraph() {
-        try {
-            // directed and cyclic graph with non-negative weights
-            int numNodes = 2 + (int) (Math.random() * 24); // [2, 25]
-            char[] nodes = new char[numNodes];
-            ArrayList<CustomEdge> edges = new ArrayList<>();
+        // directed and cyclic graph with non-negative weights
+        int numNodes = 2 + (int) (Math.random() * 24); // [2, 25]
+        char[] nodes = new char[numNodes];
+        ArrayList<CustomEdge> edges = new ArrayList<>();
 
-            // Firstly, initialize what nodes exist 
-            for (int i = 0; i < nodes.length; i++) {
-                nodes[i] = (char) (65 + i);
-            }
-
-            char start, end;
-            Long weight; // [0, 99]
-            CustomEdge edge;
-
-            // Secondly, create random edges to form a directed graph
-            for (int i = 0; i < nodes.length; i++) {
-                start = nodes[i];
-                // It gets less likely, the more edges already exist
-                for (int j = 0; Math.random() * j < 0.5201; j++) {
-                    end = nodes[(int) (Math.random() * (i + 1))];
-                    if (start == end) break;
-                    weight = Math.round(Math.random() * 100);
-                    edge = new CustomEdge(start, end, weight);
-                    if (!edges.contains(edge)) edges.add(edge);
-                }
-            }
-
-            shortestPathPersistence.setCurrGraph(new CustomGraph(nodes, edges));
-            return shortestPathPersistence.getCurrGraph();
-        } catch (Exception /*PersistenceException*/ e) {
-            throw new ServiceException(e.getMessage(), e);
+        // Firstly, initialize what nodes exist 
+        for (int i = 0; i < nodes.length; i++) {
+            nodes[i] = (char) (65 + i);
         }
+
+        char start, end;
+        Long weight; // [0, 99]
+        CustomEdge edge;
+
+        // Secondly, create random edges to form a directed graph
+        for (int i = 0; i < nodes.length; i++) {
+            start = nodes[i];
+            // It gets less likely, the more edges already exist
+            for (int j = 0; Math.random() * j < 0.5201; j++) {
+                end = nodes[(int) (Math.random() * (i + 1))];
+                if (start == end) break;
+                weight = Math.round(Math.random() * 100);
+                edge = new CustomEdge(start, end, weight);
+                if (!edges.contains(edge)) edges.add(edge);
+            }
+        }
+
+        this.currGraph = new CustomGraph(nodes, edges);
+        return this.currGraph;
     }
 
-    public ShortestPathResultDto getShortestPath(ShortestPathDto shortestPathDto) {
+    public CustomEdge[] getShortestPath(ShortestPathDto shortestPathDto) {
         try {
-            /*
-            TODO: Basic implementation done
+            // TODO: Basic implementation done
 
-            CustomGraph graph = shortestPathPersistence.getCurrGraph();
-            validator.validateShortestPathDto(graph, shortestPathDto);
+            CustomGraph currGraph = this.currGraph;
+            validator.validateShortestPathDto(currGraph, shortestPathDto);
 
             Object[] results = new Object[4];
             Thread[] threads = new Thread[results.length];
             Runnable[] methods = new Runnable[] {
-                () -> method1(graph, shortestPathDto, results[0]),
-                () -> method2(graph, shortestPathDto, results[1]),
-                () -> method3(graph, shortestPathDto, results[2]),
-                () -> method4(graph, shortestPathDto, results[3])
+                () -> method1(currGraph, shortestPathDto, results[0]),
+                () -> method2(currGraph, shortestPathDto, results[1]),
+                () -> method3(currGraph, shortestPathDto, results[2]),
+                () -> method4(currGraph, shortestPathDto, results[3])
             };
 
             // Async
@@ -85,28 +77,23 @@ public class ShortestPathService {
             }
 
             for (int i = 0; i < threads.length; i++) {
-                try {
-                    threads[i].join();
-                } catch (InterruptedException e) {
-                    // TODO
-                    e.printStackTrace();
-                }
+                threads[i].join();
             }
             // Sync
 
             // 1. Check if all values are the same, if not Exception
             // 2. Construct return value
-            */
+            // 3. Save values in database shortestPathDataRepository
 
             return null;
-        } catch (Exception /*PersistenceException*/ e) {
-            throw new ServiceException(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new ServiceException("Threads could not be merged.");
         }
     }
 
     public ShortestPathData getShortestPathData() {
-        // TODO
-        return shortestPathPersistence.getShortestPathData();
+        // return shortestPathDataRepository.getData();
+        return null;
     }
 
     // Bellman-Ford algorithm O(V * E)
