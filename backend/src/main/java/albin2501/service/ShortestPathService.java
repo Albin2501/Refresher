@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import albin2501.datatype.CustomEdge;
 import albin2501.datatype.CustomGraph;
 import albin2501.datatype.ShortestPathData;
-import albin2501.dto.shortestPath.ShortestPathDto;
 import albin2501.exception.ServiceException;
 import albin2501.repository.ShortestPathDataRepository;
 import albin2501.util.Validator;
@@ -54,20 +53,20 @@ public class ShortestPathService {
         return this.currGraph;
     }
 
-    public CustomEdge[] getShortestPath(ShortestPathDto shortestPathDto) {
+    public CustomEdge[] getShortestPath(char startNode, char endNode) {
         try {
             // TODO: Basic implementation done
 
             CustomGraph currGraph = this.currGraph;
-            validator.validateShortestPathDto(currGraph, shortestPathDto);
+            validator.validateShortestPathDto(currGraph, startNode, endNode);
 
             Object[] results = new Object[4];
             Thread[] threads = new Thread[results.length];
             Runnable[] methods = new Runnable[] {
-                () -> method1(currGraph, shortestPathDto, results[0]),
-                () -> method2(currGraph, shortestPathDto, results[1]),
-                () -> method3(currGraph, shortestPathDto, results[2]),
-                () -> method4(currGraph, shortestPathDto, results[3])
+                () -> method1(currGraph, startNode, endNode, results[0]),
+                () -> method2(currGraph, startNode, endNode, results[1]),
+                () -> method3(currGraph, startNode, endNode, results[2]),
+                () -> method4(currGraph, startNode, endNode, results[3])
             };
 
             // Async
@@ -97,7 +96,7 @@ public class ShortestPathService {
     }
 
     // Bellman-Ford algorithm O(V * E)
-    private void method1(CustomGraph graph, ShortestPathDto shortestPathDto, Object object) {
+    private void method1(CustomGraph graph, char startNode, char endNode, Object object) {
         /*
         TODO: Basic implementation done, untested
 
@@ -112,7 +111,7 @@ public class ShortestPathService {
         Long weight;
 
         for (int i = 0; i < nodes.length; i++) {
-            if (shortestPathDto.start() == nodes[i]) distances.put(nodes[i], 0L);
+            if (startNode == nodes[i]) distances.put(nodes[i], 0L);
             else distances.put(nodes[i], Long.MAX_VALUE);
         }
 
@@ -133,9 +132,9 @@ public class ShortestPathService {
 
         ArrayList<CustomEdge> shortestPath = new ArrayList<>();
         List<Character> path = new ArrayList<>();
-        char current = shortestPathDto.end();
+        char current = endNode;
 
-        while (current != shortestPathDto.start()) {
+        while (current != startNode) {
             path.add(current);
             current = pred.get(current);
             if (!pred.containsKey(current)) {
@@ -144,7 +143,7 @@ public class ShortestPathService {
             }
         }
 
-        path.add(shortestPathDto.start());
+        path.add(startNode);
         Collections.reverse(path);
 
         Long endTime = System.nanoTime();
@@ -155,17 +154,17 @@ public class ShortestPathService {
     }
 
     // Dijkstra's algorithm with list O(V^2)
-    private void method2(CustomGraph graph, ShortestPathDto shortestPathDto, Object object) {
+    private void method2(CustomGraph graph, char startNode, char endNode, Object object) {
         object = null;
     }
 
     // Dijkstra's algorithm with binary heap th binary heap O((E + V) * log V)
-    private void method3(CustomGraph graph, ShortestPathDto shortestPathDto, Object object) {
+    private void method3(CustomGraph graph, char startNode, char endNode, Object object) {
         object = null;
     }
 
     // Dijkstra's algorithm with Fibonacci heap O(E + V * log V)
-    private void method4(CustomGraph graph, ShortestPathDto shortestPathDto, Object object) {
+    private void method4(CustomGraph graph, char startNode, char endNode, Object object) {
         object = null;
     }
 }

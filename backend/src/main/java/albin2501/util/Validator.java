@@ -5,7 +5,6 @@ import javax.imageio.ImageIO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import albin2501.datatype.CustomGraph;
-import albin2501.dto.shortestPath.ShortestPathDto;
 import albin2501.entity.Grid;
 import albin2501.entity.TextArt;
 import albin2501.exception.NotFoundException;
@@ -96,15 +95,14 @@ public class Validator {
         throw new ValidationException(message.toString());
     }
 
-    public void validateShortestPathDto(CustomGraph graph, ShortestPathDto shortestPathDto) {
+    public void validateShortestPathDto(CustomGraph graph, char startNode, char endNode) {
         if (graph == null) throw new ValidationException("Graph hasn't been generated yet.");
-        if (shortestPathDto == null) throw new ValidationException("A path needs to be selected.");
 
         boolean start = false;
         boolean end = false;
         for (char name : graph.getNodes()) {
-            start = start || name == shortestPathDto.startNode();
-            end = end || name == shortestPathDto.endNode();
+            start = start || name == startNode;
+            end = end || name == endNode;
         }
 
         if (!start) throw new ValidationException("Starting node does not exist.");

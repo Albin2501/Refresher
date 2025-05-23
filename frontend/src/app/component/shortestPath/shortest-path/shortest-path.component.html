@@ -1,1 +1,8 @@
-<p>shortest-path works!</p>
+<div class="container">
+    <button (click)="get()" class="get blue">GET</button>
+    <button (click)="post()" class="post green">POST</button>
+    <button (click)="getData()" class="getData blue">GET DATA</button>
+</div>
+
+<div>{{customGraph.nodes}}</div>
+<div *ngFor="let edge of customGraph.edges">{{edge.start}}, {{edge.end}}, {{edge.weight}}</div>

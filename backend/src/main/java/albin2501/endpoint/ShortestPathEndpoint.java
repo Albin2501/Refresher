@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import albin2501.datatype.CustomEdge;
 import albin2501.datatype.CustomGraph;
 import albin2501.dto.shortestPath.ShortestPathDataDto;
-import albin2501.dto.shortestPath.ShortestPathDto;
+import albin2501.dto.shortestPath.ShortestPathSelectionDto;
 import albin2501.exception.ServiceException;
 import albin2501.exception.ValidationException;
 import albin2501.service.ShortestPathService;
@@ -41,9 +41,12 @@ public class ShortestPathEndpoint {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public CustomEdge[] getShortestPath(@RequestBody ShortestPathDto shortestPathDto) {
+    public CustomEdge[] getShortestPath(@RequestBody ShortestPathSelectionDto shortestPathSelectionDto) {
         try {
-            return shortestPathService.getShortestPath(shortestPathDto);
+            return shortestPathService.getShortestPath(
+                shortestPathSelectionDto.startNode(),
+                shortestPathSelectionDto.endNode()
+                );
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (ValidationException e) {

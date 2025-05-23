@@ -3,9 +3,9 @@ import { backendBase } from '../../util/config';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ShortestPathDataDto } from '../../dto/shortestPath/ShortestPathDataDto';
-import { ShortestPathDto } from '../../dto/shortestPath/ShortestPathDto';
 import { CustomGraph } from '../../dto/shortestPath/CustomGraph';
 import { CustomEdge } from '../../dto/shortestPath/CustomEdge';
+import { ShortestPathSelectionDto } from '../../dto/shortestPath/ShortestPathSelectionDto';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,8 @@ export class ShortestPathService {
       return this.http.get<CustomGraph>(this.shortestPathUri);
     }
 
-    getShortestPath(shortestPathDto: ShortestPathDto): Observable<CustomEdge[]> {
-      return this.http.post<CustomEdge[]>(this.shortestPathUri, shortestPathDto);
+    getShortestPath(shortestPathSelectionDto: ShortestPathSelectionDto): Observable<CustomEdge[]> {
+      return this.http.post<CustomEdge[]>(this.shortestPathUri, shortestPathSelectionDto);
     }
 
     getShortestPathData(): Observable<ShortestPathDataDto> {
