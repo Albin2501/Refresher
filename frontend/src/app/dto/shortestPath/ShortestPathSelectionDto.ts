@@ -1,4 +1,4 @@
 export interface ShortestPathSelectionDto {
-    start: string;
-    end: string;
+    startNode: string;
+    endNode: string;
 }

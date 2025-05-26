@@ -1,34 +1,32 @@
 package albin2501.datatype;
 
-import java.util.Objects;
-
 public class CustomEdge {
-    private char start;
-    private char end;
+    private String startNode;
+    private String endNode;
     private Long weight;
 
     public CustomEdge() { }
 
-    public CustomEdge(char start, char end, Long weight) {
-        this.start = start;
-        this.end = end;
+    public CustomEdge(String startNode, String endNode, Long weight) {
+        this.startNode = startNode;
+        this.endNode = endNode;
         this.weight = weight;
     }
 
-    public char getStart() {
-        return this.start;
+    public String getStartNode() {
+        return this.startNode;
     }
 
-    public void setStart(char start) {
-        this.start = start;
+    public void setStartNode(String startNode) {
+        this.startNode = startNode;
     }
 
-    public char getEnd() {
-        return this.end;
+    public String getEndNode() {
+        return this.endNode;
     }
 
-    public void setEnd(char end) {
-        this.end = end;
+    public void setEndNode(String endNode) {
+        this.endNode = endNode;
     }
 
     public Long getWeight() {
@@ -39,42 +37,11 @@ public class CustomEdge {
         this.weight = weight;
     }
 
-    public CustomEdge start(char start) {
-        setStart(start);
-        return this;
-    }
-
-    public CustomEdge end(char end) {
-        setEnd(end);
-        return this;
-    }
-
-    public CustomEdge weight(Long weight) {
-        setWeight(weight);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof CustomEdge)) {
-            return false;
-        }
-        CustomEdge customEdge = (CustomEdge) o;
-        return start == customEdge.start && end == customEdge.end && Objects.equals(weight, customEdge.weight);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(start, end, weight);
-    }
-
     @Override
     public String toString() {
         return "{" +
-            " start='" + getStart() + "'" +
-            ", end='" + getEnd() + "'" +
+            " startNode='" + getStartNode() + "'" +
+            ", endNode='" + getEndNode() + "'" +
             ", weight='" + getWeight() + "'" +
             "}";
     }

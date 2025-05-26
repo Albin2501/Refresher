@@ -52,7 +52,7 @@ public class GridEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public GridDto putGrid(@PathVariable("id") Long id, @RequestBody GridSelectionDto gridSelectionDto) {
         try {
-            return mapper.gridToGridDto(gridService.putGrid(id, gridSelectionDto.getPos1(), gridSelectionDto.getPos2()));
+            return mapper.gridToGridDto(gridService.putGrid(id, gridSelectionDto.pos1(), gridSelectionDto.pos2()));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {

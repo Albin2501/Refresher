@@ -3,4 +3,24 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
+    margin: 1rem;
+}
+
+.containerNodes {
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem;
+}
+
+.containerEdges {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 8rem;
+    column-gap: 1rem;
 }

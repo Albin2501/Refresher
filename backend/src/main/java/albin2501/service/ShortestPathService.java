@@ -1,8 +1,7 @@
 package albin2501.service;
 
-import java.util.ArrayList;
+import java.util.*;
 import org.springframework.stereotype.Service;
-
 import albin2501.datatype.CustomEdge;
 import albin2501.datatype.CustomGraph;
 import albin2501.datatype.ShortestPathData;
@@ -24,15 +23,15 @@ public class ShortestPathService {
     public CustomGraph getRandomGraph() {
         // directed and cyclic graph with non-negative weights
         int numNodes = 2 + (int) (Math.random() * 24); // [2, 25]
-        char[] nodes = new char[numNodes];
+        String[] nodes = new String[numNodes];
         ArrayList<CustomEdge> edges = new ArrayList<>();
 
         // Firstly, initialize what nodes exist 
         for (int i = 0; i < nodes.length; i++) {
-            nodes[i] = (char) (65 + i);
+            nodes[i] = (char) (65 + i) + "";
         }
 
-        char start, end;
+        String start, end;
         Long weight; // [0, 99]
         CustomEdge edge;
 
@@ -53,10 +52,8 @@ public class ShortestPathService {
         return this.currGraph;
     }
 
-    public CustomEdge[] getShortestPath(char startNode, char endNode) {
+    public CustomEdge[] getShortestPath(String startNode, String endNode) {
         try {
-            // TODO: Basic implementation done
-
             CustomGraph currGraph = this.currGraph;
             validator.validateShortestPathDto(currGraph, startNode, endNode);
 
@@ -80,6 +77,7 @@ public class ShortestPathService {
             }
             // Sync
 
+            // TODO
             // 1. Check if all values are the same, if not Exception
             // 2. Construct return value
             // 3. Save values in database shortestPathDataRepository
@@ -96,18 +94,16 @@ public class ShortestPathService {
     }
 
     // Bellman-Ford algorithm O(V * E)
-    private void method1(CustomGraph graph, char startNode, char endNode, Object object) {
-        /*
-        TODO: Basic implementation done, untested
-
+    private void method1(CustomGraph graph, String startNode, String endNode, Object object) {
+        // TODO: Testing
         Long startTime = System.nanoTime();
 
-        char[] nodes = graph.getNodes();
-        HashMap<Character, Long> distances = new HashMap<>(nodes.length);
-        HashMap<Character, Character> pred = new HashMap<>(nodes.length);
+        String[] nodes = graph.getNodes();
+        HashMap<String, Long> distances = new HashMap<>(nodes.length);
+        HashMap<String, String> pred = new HashMap<>(nodes.length);
         ArrayList<CustomEdge> edges = graph.getEdges();
         CustomEdge edge;
-        char start, end;
+        String start, end;
         Long weight;
 
         for (int i = 0; i < nodes.length; i++) {
@@ -118,8 +114,8 @@ public class ShortestPathService {
         for (int i = 0; i < nodes.length - 1; i++) {
             for (int j = 0; j < edges.size(); j++) {
                 edge = edges.get(j);
-                start = edge.getStart();
-                end = edge.getEnd();
+                start = edge.getStartNode();
+                end = edge.getEndNode();
                 weight = edge.getWeight();
 
                 if (distances.get(start) != Long.MAX_VALUE && 
@@ -131,8 +127,8 @@ public class ShortestPathService {
         }
 
         ArrayList<CustomEdge> shortestPath = new ArrayList<>();
-        List<Character> path = new ArrayList<>();
-        char current = endNode;
+        List<String> path = new ArrayList<>();
+        String current = endNode;
 
         while (current != startNode) {
             path.add(current);
@@ -150,21 +146,20 @@ public class ShortestPathService {
         Long time = endTime - startTime;
 
         object = null;
-        */
     }
 
     // Dijkstra's algorithm with list O(V^2)
-    private void method2(CustomGraph graph, char startNode, char endNode, Object object) {
+    private void method2(CustomGraph graph, String startNode, String endNode, Object object) {
         object = null;
     }
 
     // Dijkstra's algorithm with binary heap th binary heap O((E + V) * log V)
-    private void method3(CustomGraph graph, char startNode, char endNode, Object object) {
+    private void method3(CustomGraph graph, String startNode, String endNode, Object object) {
         object = null;
     }
 
     // Dijkstra's algorithm with Fibonacci heap O(E + V * log V)
-    private void method4(CustomGraph graph, char startNode, char endNode, Object object) {
+    private void method4(CustomGraph graph, String startNode, String endNode, Object object) {
         object = null;
     }
 }

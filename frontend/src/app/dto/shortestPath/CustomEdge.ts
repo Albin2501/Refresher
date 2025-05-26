@@ -1,5 +1,5 @@
 export interface CustomEdge {
-    start: string;
-    end: string;
+    startNode: string;
+    endNode: string;
     weight: number;
 }

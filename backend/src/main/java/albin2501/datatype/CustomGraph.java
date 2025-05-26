@@ -1,24 +1,23 @@
 package albin2501.datatype;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class CustomGraph {
-    private char[] nodes;
+    private String[] nodes;
     private ArrayList<CustomEdge> edges;
 
     public CustomGraph() { }
 
-    public CustomGraph(char[] nodes, ArrayList<CustomEdge> edges) {
+    public CustomGraph(String[] nodes, ArrayList<CustomEdge> edges) {
         this.nodes = nodes;
         this.edges = edges;
     }
 
-    public char[] getNodes() {
+    public String[] getNodes() {
         return this.nodes;
     }
 
-    public void setNodes(char[] nodes) {
+    public void setNodes(String[] nodes) {
         this.nodes = nodes;
     }
 
@@ -30,36 +29,10 @@ public class CustomGraph {
         this.edges = edges;
     }
 
-    public CustomGraph nodes(char[] nodes) {
-        setNodes(nodes);
-        return this;
-    }
-
-    public CustomGraph edges(ArrayList<CustomEdge> edges) {
-        setEdges(edges);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof CustomGraph)) {
-            return false;
-        }
-        CustomGraph customGraph = (CustomGraph) o;
-        return Objects.equals(nodes, customGraph.nodes) && Objects.equals(edges, customGraph.edges);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nodes, edges);
-    }
-
     @Override
     public String toString() {
         return "{" +
-            " nodes='" + new String(getNodes()) + "'" +
+            " nodes='" + getNodes() + "'" +
             ", edges='" + getEdges() + "'" +
             "}";
     }

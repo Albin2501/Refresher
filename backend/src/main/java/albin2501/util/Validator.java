@@ -95,14 +95,14 @@ public class Validator {
         throw new ValidationException(message.toString());
     }
 
-    public void validateShortestPathDto(CustomGraph graph, char startNode, char endNode) {
+    public void validateShortestPathDto(CustomGraph graph, String startNode, String endNode) {
         if (graph == null) throw new ValidationException("Graph hasn't been generated yet.");
 
         boolean start = false;
         boolean end = false;
-        for (char name : graph.getNodes()) {
-            start = start || name == startNode;
-            end = end || name == endNode;
+        for (String name : graph.getNodes()) {
+            start = start || name.equals(startNode);
+            end = end || name.equals(endNode);
         }
 
         if (!start) throw new ValidationException("Starting node does not exist.");

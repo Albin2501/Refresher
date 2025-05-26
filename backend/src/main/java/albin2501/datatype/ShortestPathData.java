@@ -1,7 +1,5 @@
 package albin2501.datatype;
 
-import java.util.Objects;
-
 public class ShortestPathData {
     private Long functionAmount;
     private char startNodeMax;
@@ -12,8 +10,7 @@ public class ShortestPathData {
     private Long method3Average;
     private Long method4Average;
 
-    public ShortestPathData() {
-    }
+    public ShortestPathData() { }
 
     public ShortestPathData(Long functionAmount, char startNodeMax, char endNodeMax, float nodesAmountAverage, Long method1Average, Long method2Average, Long method3Average, Long method4Average) {
         this.functionAmount = functionAmount;
@@ -88,62 +85,6 @@ public class ShortestPathData {
 
     public void setMethod4Average(Long method4Average) {
         this.method4Average = method4Average;
-    }
-
-    public ShortestPathData functionAmount(Long functionAmount) {
-        setFunctionAmount(functionAmount);
-        return this;
-    }
-
-    public ShortestPathData startNodeMax(char startNodeMax) {
-        setStartNodeMax(startNodeMax);
-        return this;
-    }
-
-    public ShortestPathData endNodeMax(char endNodeMax) {
-        setEndNodeMax(endNodeMax);
-        return this;
-    }
-
-    public ShortestPathData nodesAmountAverage(float nodesAmountAverage) {
-        setNodesAmountAverage(nodesAmountAverage);
-        return this;
-    }
-
-    public ShortestPathData method1Average(Long method1Average) {
-        setMethod1Average(method1Average);
-        return this;
-    }
-
-    public ShortestPathData method2Average(Long method2Average) {
-        setMethod2Average(method2Average);
-        return this;
-    }
-
-    public ShortestPathData method3Average(Long method3Average) {
-        setMethod3Average(method3Average);
-        return this;
-    }
-
-    public ShortestPathData method4Average(Long method4Average) {
-        setMethod4Average(method4Average);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ShortestPathData)) {
-            return false;
-        }
-        ShortestPathData shortestPathData = (ShortestPathData) o;
-        return Objects.equals(functionAmount, shortestPathData.functionAmount) && startNodeMax == shortestPathData.startNodeMax && endNodeMax == shortestPathData.endNodeMax && nodesAmountAverage == shortestPathData.nodesAmountAverage && Objects.equals(method1Average, shortestPathData.method1Average) && Objects.equals(method2Average, shortestPathData.method2Average) && Objects.equals(method3Average, shortestPathData.method3Average) && Objects.equals(method4Average, shortestPathData.method4Average);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(functionAmount, startNodeMax, endNodeMax, nodesAmountAverage, method1Average, method2Average, method3Average, method4Average);
     }
 
     @Override

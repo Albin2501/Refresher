@@ -36,7 +36,7 @@ public class GridService {
     public Grid putGrid(Long id, Long[] pos1, Long[] pos2) {
         Grid grid = getGrid(id);
         GridDataDto gridDataDto = getGridData();
-        validator.validateGridSelection(pos1, pos2, gridDataDto.getN(), gridDataDto.getM());
+        validator.validateGridSelection(pos1, pos2, gridDataDto.n(), gridDataDto.m());
 
         // Algorithm in O(3 * n * m) at worst
         // Make first position default and let it represent upper-left
