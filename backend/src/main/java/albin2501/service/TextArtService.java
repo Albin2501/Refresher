@@ -1,12 +1,13 @@
 package albin2501.service;
 
 import javax.imageio.ImageIO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import albin2501.entity.TextArt;
 import albin2501.exception.ServiceException;
 import albin2501.repository.TextArtRepository;
-import albin2501.util.Validator;
+import albin2501.validator.TextArtValidator;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -15,13 +16,11 @@ import java.util.List;
 
 @Service
 public class TextArtService {
-    private TextArtRepository textArtRepository;
-    private Validator validator;
 
-    public TextArtService(TextArtRepository textArtRepository, Validator validator) {
-        this.textArtRepository = textArtRepository;
-        this.validator = validator;
-    }
+    @Autowired
+    private TextArtRepository textArtRepository;
+    @Autowired
+    private TextArtValidator textArtValidator;
 
     public TextArt[] getTextArt() {
         List<TextArt> textArts = textArtRepository.findAllCustom();
@@ -30,7 +29,7 @@ public class TextArtService {
 
     public TextArt postTextArt(MultipartFile image, Long width, Long height) {
         try {
-            validator.validateTextArt(image, width, height);
+            textArtValidator.validateTextArt(image, width, height);
 
             // Scale image to user specification
             // Write scaled image to BufferedImage in gray scale
@@ -77,14 +76,11 @@ public class TextArtService {
         }
     }
 
-    public boolean deleteTextArt() {
+    public void deleteTextArt() {
         textArtRepository.deleteAll();
-        return textArtRepository.count() == 0;
     }
 
-    public boolean deleteTextArtById(Long id) {
-        if (!textArtRepository.existsById(id)) return false;
+    public void deleteTextArtById(Long id) {
         textArtRepository.deleteById(id);
-        return true;
     }
 }

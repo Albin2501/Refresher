@@ -2,30 +2,22 @@ package albin2501.endpoint;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
-import albin2501.datatype.CustomEdge;
-import albin2501.datatype.CustomGraph;
-import albin2501.dto.shortestPath.ShortestPathDataDto;
-import albin2501.dto.shortestPath.ShortestPathSelectionDto;
-import albin2501.exception.ServiceException;
-import albin2501.exception.ValidationException;
+import albin2501.datatype.*;
+import albin2501.dto.shortestPath.*;
+import albin2501.exception.*;
+import albin2501.mapper.ShortestPathMapper;
 import albin2501.service.ShortestPathService;
-import albin2501.util.Config;
-import albin2501.util.Mapper;
+import albin2501.Application;
 
 @RestController
-@RequestMapping(path = ShortestPathEndpoint.url)
-@CrossOrigin(origins = Config.frontendBase) // CORS access control
+@RequestMapping(path = "/shortestPath")
+@CrossOrigin(origins = Application.frontendBase)
 public class ShortestPathEndpoint {
-    final static String url = "/shortestPath";
-    private final ShortestPathService shortestPathService;
-    private final Mapper mapper;
-
-    public ShortestPathEndpoint(ShortestPathService shortestPathService, Mapper mapper) {
-        this.shortestPathService = shortestPathService;
-        this.mapper = mapper;
-    }
+    
+    @Autowired
+    private ShortestPathService shortestPathService;
 
     // A graph gets randomly generated in the backend and displayed in the frontend.
     // The shortest path between a given start- and endpoint will be calculated 
@@ -57,6 +49,6 @@ public class ShortestPathEndpoint {
     @GetMapping(value = "/data")
     @ResponseStatus(HttpStatus.OK)
     public ShortestPathDataDto getShortestPathData() {
-        return mapper.shortestPathDataToShortestPathDataDto(shortestPathService.getShortestPathData());
+        return ShortestPathMapper.INSTANCE.shortestPathDataToShortestPathDataDto(shortestPathService.getShortestPathData());
     }
 }

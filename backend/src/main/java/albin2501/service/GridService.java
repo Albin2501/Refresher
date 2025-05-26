@@ -1,42 +1,39 @@
 package albin2501.service;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Optional;
+import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import albin2501.datagenerator.DataGenerator;
 import albin2501.dto.grid.GridDataDto;
 import albin2501.entity.Grid;
 import albin2501.repository.GridRepository;
 import albin2501.service.GridService;
-import albin2501.util.DataGenerator;
-import albin2501.util.Validator;
+import albin2501.validator.GridValidator;
 
 @Service
 public class GridService {
-    private GridRepository gridRepository;
-    private Validator validator;
 
-    public GridService(GridRepository gridRepository, Validator validator) {
-        this.gridRepository = gridRepository;
-        this.validator = validator;
-    }
+    @Autowired
+    private GridRepository gridRepository;
+    @Autowired
+    private GridValidator gridValidator;
 
     public GridDataDto getGridData() {
         Optional<Long[]> idsOptional = gridRepository.findAllIds();
-        validator.validateGrids(idsOptional);
+        gridValidator.validateGrids(idsOptional);
         return new GridDataDto(DataGenerator.n, DataGenerator.m, idsOptional.get());
     }
 
     public Grid getGrid(Long id) {
         Optional<Grid> gridOptional = gridRepository.findById(id);
-        validator.validateGrid(gridOptional);
+        gridValidator.validateGrid(gridOptional);
         return gridOptional.get();
     }
 
     public Grid putGrid(Long id, Long[] pos1, Long[] pos2) {
         Grid grid = getGrid(id);
         GridDataDto gridDataDto = getGridData();
-        validator.validateGridSelection(pos1, pos2, gridDataDto.n(), gridDataDto.m());
+        gridValidator.validateGridSelection(pos1, pos2, gridDataDto.n(), gridDataDto.m());
 
         // Algorithm in O(3 * n * m) at worst
         // Make first position default and let it represent upper-left

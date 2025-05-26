@@ -51,8 +51,8 @@ export class GridComponent {
     });
   }
 
-  putGrid(id: number, gridSelection: GridSelectionDto): void {
-    this.gridService.putGrid(id, gridSelection).subscribe({
+  patchGrid(id: number, gridSelection: GridSelectionDto): void {
+    this.gridService.patchGrid(id, gridSelection).subscribe({
       next: gridDto => {
         this.gridDto = gridDto;
         this.colorGrid();
@@ -84,7 +84,7 @@ export class GridComponent {
     if (event.button === 1 || event.button === 2) return; // only left mouse-button
     this.pos2[0] = pos2x;
     this.pos2[1] = pos2y;
-    this.putGrid(this.gridDto.id, {pos1: this.pos1, pos2: this.pos2} as GridSelectionDto);
+    this.patchGrid(this.gridDto.id, {pos1: this.pos1, pos2: this.pos2} as GridSelectionDto);
   }
 
   mouseHover(posx: number, posy: number, event: MouseEvent): void {

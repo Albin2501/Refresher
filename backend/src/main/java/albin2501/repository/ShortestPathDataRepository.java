@@ -1,7 +1,7 @@
 package albin2501.repository;
 
+import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import albin2501.entity.ShortestPath;
 
 @Repository

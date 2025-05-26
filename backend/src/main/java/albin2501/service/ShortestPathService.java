@@ -1,24 +1,21 @@
 package albin2501.service;
 
 import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import albin2501.datatype.CustomEdge;
-import albin2501.datatype.CustomGraph;
-import albin2501.datatype.ShortestPathData;
+import albin2501.datatype.*;
 import albin2501.exception.ServiceException;
 import albin2501.repository.ShortestPathDataRepository;
-import albin2501.util.Validator;
+import albin2501.validator.ShortestPathValidator;
 
 @Service
 public class ShortestPathService {
-    private CustomGraph currGraph; 
-    private final ShortestPathDataRepository shortestPathDataRepository;
-    private final Validator validator;
 
-    public ShortestPathService(ShortestPathDataRepository shortestPathDataRepository, Validator validator) {
-        this.shortestPathDataRepository = shortestPathDataRepository;
-        this.validator = validator;
-    }
+    @Autowired
+    private ShortestPathDataRepository shortestPathDataRepository;
+    @Autowired
+    private ShortestPathValidator shortestPathValidator;
+    private CustomGraph currGraph; // volatile memory
 
     public CustomGraph getRandomGraph() {
         // directed and cyclic graph with non-negative weights
@@ -55,7 +52,7 @@ public class ShortestPathService {
     public CustomEdge[] getShortestPath(String startNode, String endNode) {
         try {
             CustomGraph currGraph = this.currGraph;
-            validator.validateShortestPathDto(currGraph, startNode, endNode);
+            shortestPathValidator.validateShortestPathDto(currGraph, startNode, endNode);
 
             Object[] results = new Object[4];
             Thread[] threads = new Thread[results.length];

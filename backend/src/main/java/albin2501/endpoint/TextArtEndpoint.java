@@ -3,35 +3,29 @@ package albin2501.endpoint;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import albin2501.dto.textArt.TextArtDto;
-import albin2501.exception.NotFoundException;
-import albin2501.exception.ServiceException;
-import albin2501.exception.ValidationException;
+import java.util.Arrays;
+import albin2501.dto.textArt.*;
+import albin2501.exception.*;
+import albin2501.mapper.TextArtMapper;
 import albin2501.service.TextArtService;
-import albin2501.util.Config;
-import albin2501.util.Mapper;
+import albin2501.Application;
 
 @RestController
-@RequestMapping(path = TextArtEndpoint.url)
-@CrossOrigin(origins = Config.frontendBase) // CORS access control
+@RequestMapping(path = "/textArt")
+@CrossOrigin(origins = Application.frontendBase)
 public class TextArtEndpoint {
-    final static String url = "/textArt";
-    private TextArtService textArtService;
-    private Mapper mapper;
 
-    public TextArtEndpoint(TextArtService textArtService, Mapper mapper) {
-        this.textArtService = textArtService;
-        this.mapper = mapper;
-    }
+    @Autowired
+    private TextArtService textArtService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public TextArtDto[] getTextArt() {
         try {
             return Arrays.stream(textArtService.getTextArt()).
-                    map(x -> mapper.textArtToTextArtDto(x)).toArray(TextArtDto[]::new);
+                    map(x -> TextArtMapper.INSTANCE.textArtToTextArtDto(x)).toArray(TextArtDto[]::new);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
@@ -45,7 +39,7 @@ public class TextArtEndpoint {
                 @RequestParam("height") Long height
             ) {
         try {
-            return mapper.textArtToTextArtDto(textArtService.postTextArt(image, width, height));
+            return TextArtMapper.INSTANCE.textArtToTextArtDto(textArtService.postTextArt(image, width, height));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (ValidationException e) {
@@ -55,9 +49,9 @@ public class TextArtEndpoint {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
-    public boolean deleteTextArt() {
+    public void deleteTextArt() {
         try {
-            return textArtService.deleteTextArt();
+            textArtService.deleteTextArt();
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {
@@ -67,9 +61,9 @@ public class TextArtEndpoint {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public boolean deleteTextArtById(@PathVariable("id") Long id) {
+    public void deleteTextArtById(@PathVariable("id") Long id) {
         try {
-            return textArtService.deleteTextArtById(id);
+            textArtService.deleteTextArtById(id);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {

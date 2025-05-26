@@ -2,29 +2,21 @@ package albin2501.endpoint;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import albin2501.dto.grid.GridDataDto;
-import albin2501.dto.grid.GridDto;
-import albin2501.dto.grid.GridSelectionDto;
-import albin2501.exception.NotFoundException;
-import albin2501.exception.ServiceException;
-import albin2501.exception.ValidationException;
+import albin2501.dto.grid.*;
+import albin2501.exception.*;
+import albin2501.mapper.GridMapper;
 import albin2501.service.GridService;
-import albin2501.util.Config;
-import albin2501.util.Mapper;
+import albin2501.Application;
 
 @RestController
-@RequestMapping(path = GridEndpoint.url)
-@CrossOrigin(origins = Config.frontendBase) // CORS access control
+@RequestMapping(path = "/grid")
+@CrossOrigin(origins = Application.frontendBase)
 public class GridEndpoint {
-    final static String url = "/grid";
-    private GridService gridService;
-    private Mapper mapper;
 
-    public GridEndpoint(GridService gridService, Mapper mapper) {
-        this.gridService = gridService;
-        this.mapper = mapper;
-    }
+    @Autowired
+    private GridService gridService;
 
     @GetMapping(value = "/data")
     @ResponseStatus(HttpStatus.OK)
@@ -40,7 +32,7 @@ public class GridEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public GridDto getGrid(@PathVariable("id") Long id) {
         try {
-            return mapper.gridToGridDto(gridService.getGrid(id));
+            return GridMapper.INSTANCE.gridToGridDto(gridService.getGrid(id));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {
@@ -48,11 +40,11 @@ public class GridEndpoint {
         }
     }
 
-    @PutMapping(value = "/{id}")
+    @PatchMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public GridDto putGrid(@PathVariable("id") Long id, @RequestBody GridSelectionDto gridSelectionDto) {
         try {
-            return mapper.gridToGridDto(gridService.putGrid(id, gridSelectionDto.pos1(), gridSelectionDto.pos2()));
+            return GridMapper.INSTANCE.gridToGridDto(gridService.putGrid(id, gridSelectionDto.pos1(), gridSelectionDto.pos2()));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {
@@ -66,7 +58,7 @@ public class GridEndpoint {
     @ResponseStatus(HttpStatus.OK)
     public GridDto clearGrid(@PathVariable("id") Long id) throws Exception {
         try {
-            return mapper.gridToGridDto(gridService.clearGrid(id));
+            return GridMapper.INSTANCE.gridToGridDto(gridService.clearGrid(id));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (NotFoundException e) {

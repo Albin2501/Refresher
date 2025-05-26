@@ -1,5 +1,6 @@
-package albin2501.util;
+package albin2501.datagenerator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import albin2501.entity.Grid;
@@ -7,14 +8,13 @@ import albin2501.repository.GridRepository;
 
 @Component
 public class DataGenerator implements CommandLineRunner {
+
+    @Autowired
     private GridRepository gridRepository;
+
     public static Long n = 25L; // # of rows
     public static Long m = 50L; // # of columns
     public static Long g = 3L; // # of grids
-    
-    public DataGenerator(GridRepository gridRepository) {
-        this.gridRepository = gridRepository;
-    }
 
     @Override
     public void run(String... args) throws Exception {

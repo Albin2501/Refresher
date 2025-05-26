@@ -2,9 +2,7 @@ package albin2501.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import albin2501.util.DataGenerator;
+import albin2501.datagenerator.DataGenerator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +10,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import lombok.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Grid {
 
@@ -67,62 +70,5 @@ public class Grid {
                 gridCells.add(gridCell);
             }
         }
-    }
-
-    public Grid() { }
-
-    public Grid(Long id, List<GridCell> gridCells) {
-        this.id = id;
-        this.gridCells = gridCells;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<GridCell> getGridCells() {
-        return this.gridCells;
-    }
-
-    public void setGridCells(List<GridCell> gridCells) {
-        this.gridCells = gridCells;
-    }
-
-    public Grid id(Long id) {
-        setId(id);
-        return this;
-    }
-
-    public Grid gridCells(List<GridCell> gridCells) {
-        setGridCells(gridCells);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Grid)) {
-            return false;
-        }
-        Grid grid = (Grid) o;
-        return Objects.equals(id, grid.id) && Objects.equals(gridCells, grid.gridCells);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, gridCells);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", gridCells='" + getGridCells() + "'" +
-            "}";
     }
 }

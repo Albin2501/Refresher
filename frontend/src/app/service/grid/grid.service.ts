@@ -22,8 +22,8 @@ export class GridService {
     return this.http.get<GridDto>(this.gridUri + '/' + id);
   }
 
-  putGrid(id: number, gridSelectionDto: GridSelectionDto): Observable<GridDto> {
-    return this.http.put<GridDto>(this.gridUri + '/' + id, gridSelectionDto);
+  patchGrid(id: number, gridSelectionDto: GridSelectionDto): Observable<GridDto> {
+    return this.http.patch<GridDto>(this.gridUri + '/' + id, gridSelectionDto);
   }
 
   clearGrid(id: number): Observable<GridDto> {

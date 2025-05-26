@@ -1,55 +1,17 @@
-package albin2501.util;
+package albin2501.validator;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import albin2501.datatype.CustomGraph;
-import albin2501.entity.Grid;
 import albin2501.entity.TextArt;
 import albin2501.exception.NotFoundException;
 import albin2501.exception.ValidationException;
-import java.io.IOException;
-import java.util.Optional;
 
 @Component
-public class Validator {
-
-    public Validator() { }
-
-    public void validateGrid(Optional<Grid> gridOptional) {
-        if (!gridOptional.isPresent()) throw new NotFoundException("Grid not found.");
-    }
-
-    public void validateGrids(Optional<Long[]> idsOptional) {
-        if (!idsOptional.isPresent()) throw new NotFoundException("No grids exist.");
-    }
-
-    public void validateGridSelection(Long[] pos1, Long[] pos2, Long n, Long m) {
-        StringBuilder message = new StringBuilder("");
-
-        // Sanitize user input
-        if ((pos1 == null && pos1 == null) ||
-            (pos1 != null && pos1.length != 2) ||
-            (pos2 != null && pos2.length != 2) ||
-            (pos1 != null && (pos1[0] == null || pos1[1] == null)) ||
-            (pos2 != null && pos2[0] == null || pos2[1] == null))
-        throw new ValidationException("Selection not well formatted.");
-
-        if (pos1 != null &&
-            ((pos1[0] < 0 || pos1[0] >= n) ||
-            (pos1[1] < 0 || pos1[1] >= m)))
-        message.append("First selected point out of bounds.");
-
-        if (pos2 != null &&
-            ((pos2[0] < 0 || pos2[0] >= n) ||
-            (pos2[1] < 0 || pos2[1] >= m)))
-        message.append(message.length() > 0 ? " " : "").append("Second selected point out of bounds.");
-
-        if (message.length() > 0)
-        throw new ValidationException(message.toString());
-    }
-
+public class TextArtValidator {
+    
     public void validateTextArtId(Long id, TextArt[] textArt) {
         for (TextArt art : textArt) {
             if (art.getId() == id) return;
@@ -93,19 +55,5 @@ public class Validator {
 
         if (message.length() > 0)
         throw new ValidationException(message.toString());
-    }
-
-    public void validateShortestPathDto(CustomGraph graph, String startNode, String endNode) {
-        if (graph == null) throw new ValidationException("Graph hasn't been generated yet.");
-
-        boolean start = false;
-        boolean end = false;
-        for (String name : graph.getNodes()) {
-            start = start || name.equals(startNode);
-            end = end || name.equals(endNode);
-        }
-
-        if (!start) throw new ValidationException("Starting node does not exist.");
-        if (!end) throw new ValidationException("Ending node does not exist.");
     }
 }
