@@ -1,9 +1,11 @@
 package albin2501.service;
 
 import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import albin2501.datatype.*;
+import albin2501.entity.ShortestPath;
 import albin2501.exception.ServiceException;
 import albin2501.repository.ShortestPathDataRepository;
 import albin2501.validator.ShortestPathValidator;
@@ -54,32 +56,40 @@ public class ShortestPathService {
             CustomGraph currGraph = this.currGraph;
             shortestPathValidator.validateShortestPathDto(currGraph, startNode, endNode);
 
-            Object[] results = new Object[4];
-            Thread[] threads = new Thread[results.length];
+            // Run 4 different methods to calculate the shortest path
+            ShortestPathSummary[] res = new ShortestPathSummary[4];
+            Thread[] threads = new Thread[res.length];
             Runnable[] methods = new Runnable[] {
-                () -> method1(currGraph, startNode, endNode, results[0]),
-                () -> method2(currGraph, startNode, endNode, results[1]),
-                () -> method3(currGraph, startNode, endNode, results[2]),
-                () -> method4(currGraph, startNode, endNode, results[3])
+                () -> method1(currGraph, startNode, endNode, res[0]),
+                () -> method2(currGraph, startNode, endNode, res[1]),
+                () -> method3(currGraph, startNode, endNode, res[2]),
+                () -> method4(currGraph, startNode, endNode, res[3])
             };
-
-            // Async
             for (int i = 0; i < methods.length; i++) {
                 threads[i] = new Thread(methods[i]);
                 threads[i].start();
             }
-
             for (int i = 0; i < threads.length; i++) {
                 threads[i].join();
             }
-            // Sync
 
-            // TODO
-            // 1. Check if all values are the same, if not Exception
-            // 2. Construct return value
-            // 3. Save values in database shortestPathDataRepository
+            // Check if all values are the same
+            if (!(res[0] != null && res[1] != null && res[2] != null && res[3] != null &&
+                res[0].getSize() == res[1].getSize() &&
+                res[1].getSize() == res[2].getSize() &&
+                res[2].getSize() == res[3].getSize()
+            )) throw new ServiceException("Different shortest path calculated.");
+            
+            ShortestPath shortestPath = ShortestPath.builder().
+            method1Time(res[0].getMethodTime()).method2Time(res[1].getMethodTime()).
+            method3Time(res[2].getMethodTime()).method4Time(res[3].getMethodTime()).
+            startNode(startNode).endNode(endNode).nodesAmount(res[0].getSize()).build();
 
-            return null;
+            // Save data for statistics
+            shortestPathDataRepository.save(shortestPath);
+
+            // Return result of the method2 (Dijkstra's algorithm with list)
+            return res[1].getShortestPath();
         } catch (InterruptedException e) {
             throw new ServiceException("Threads could not be merged.");
         }
@@ -91,72 +101,58 @@ public class ShortestPathService {
     }
 
     // Bellman-Ford algorithm O(V * E)
-    private void method1(CustomGraph graph, String startNode, String endNode, Object object) {
-        // TODO: Testing
+    private void method1(CustomGraph graph, String startNode, String endNode, ShortestPathSummary shortestPathSummary) {
+        ShortestPathSummary res = new ShortestPathSummary();
         Long startTime = System.nanoTime();
 
-        String[] nodes = graph.getNodes();
-        HashMap<String, Long> distances = new HashMap<>(nodes.length);
-        HashMap<String, String> pred = new HashMap<>(nodes.length);
-        ArrayList<CustomEdge> edges = graph.getEdges();
-        CustomEdge edge;
-        String start, end;
-        Long weight;
-
-        for (int i = 0; i < nodes.length; i++) {
-            if (startNode == nodes[i]) distances.put(nodes[i], 0L);
-            else distances.put(nodes[i], Long.MAX_VALUE);
-        }
-
-        for (int i = 0; i < nodes.length - 1; i++) {
-            for (int j = 0; j < edges.size(); j++) {
-                edge = edges.get(j);
-                start = edge.getStartNode();
-                end = edge.getEndNode();
-                weight = edge.getWeight();
-
-                if (distances.get(start) != Long.MAX_VALUE && 
-                    distances.get(start) + weight < distances.get(end)) {
-                    distances.put(end, distances.get(start) + weight);
-                    pred.put(end, start);
-                }
-            }
-        }
-
-        ArrayList<CustomEdge> shortestPath = new ArrayList<>();
-        List<String> path = new ArrayList<>();
-        String current = endNode;
-
-        while (current != startNode) {
-            path.add(current);
-            current = pred.get(current);
-            if (!pred.containsKey(current)) {
-                path.clear();
-                break;
-            }
-        }
-
-        path.add(startNode);
-        Collections.reverse(path);
+        // TODO
+        
 
         Long endTime = System.nanoTime();
-        Long time = endTime - startTime;
+        res.setMethodTime(endTime - startTime);
 
-        object = null;
+        shortestPathSummary = res;
     }
 
     // Dijkstra's algorithm with list O(V^2)
-    private void method2(CustomGraph graph, String startNode, String endNode, Object object) {
-        object = null;
+    private void method2(CustomGraph graph, String startNode, String endNode, ShortestPathSummary shortestPathSummary) {
+        ShortestPathSummary res = new ShortestPathSummary();
+        Long startTime = System.nanoTime();
+
+        // TODO
+        
+
+        Long endTime = System.nanoTime();
+        res.setMethodTime(endTime - startTime);
+
+        shortestPathSummary = res;
     }
 
     // Dijkstra's algorithm with binary heap th binary heap O((E + V) * log V)
-    private void method3(CustomGraph graph, String startNode, String endNode, Object object) {
-        object = null;
+    private void method3(CustomGraph graph, String startNode, String endNode, ShortestPathSummary shortestPathSummary) {
+        ShortestPathSummary res = new ShortestPathSummary();
+        Long startTime = System.nanoTime();
+
+        // TODO
+        
+
+        Long endTime = System.nanoTime();
+        res.setMethodTime(endTime - startTime);
+
+        shortestPathSummary = res;
     }
 
     // Dijkstra's algorithm with Fibonacci heap O(E + V * log V)
-    private void method4(CustomGraph graph, String startNode, String endNode, Object object) {
-        object = null;
+    private void method4(CustomGraph graph, String startNode, String endNode, ShortestPathSummary shortestPathSummary) {
+        ShortestPathSummary res = new ShortestPathSummary();
+        Long startTime = System.nanoTime();
+
+        // TODO
+        
+
+        Long endTime = System.nanoTime();
+        res.setMethodTime(endTime - startTime);
+
+        shortestPathSummary = res;
     }
 }

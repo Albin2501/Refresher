@@ -36,10 +36,10 @@ public class ShortestPath {
     private Long method4Time;
 
     @Column(nullable = false)
-    private char startNode;
+    private String startNode;
 
     @Column(nullable = false)
-    private char endNode;
+    private String endNode;
 
     @Check(constraints = "nodes_amount >= 0")
     @Column(nullable = false)
