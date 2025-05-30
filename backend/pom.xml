@@ -21,6 +21,7 @@
 		<maven.version>3.13.0</maven.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<lombok.version>1.18.30</lombok.version>
+		<lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
 	</properties>
 
 	<dependencies>
@@ -82,7 +83,7 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok-mapstruct-binding</artifactId>
-							<version>0.2.0</version>
+							<version>${lombok-mapstruct.version}</version>
 						</path>
 						<path>
 							<groupId>org.projectlombok</groupId>

@@ -1,7 +1,6 @@
 package albin2501.service;
 
 import java.util.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import albin2501.datatype.*;
@@ -118,12 +117,46 @@ public class ShortestPathService {
     private void method2(CustomGraph graph, String startNode, String endNode, ShortestPathSummary shortestPathSummary) {
         ShortestPathSummary res = new ShortestPathSummary();
         Long startTime = System.nanoTime();
-
-        // TODO
         
+        Long[] dist = new Long[graph.getNodes().length];
+        Integer[] prev = new Integer[graph.getNodes().length];
+        Queue<Integer> queue = new ArrayDeque<Integer>();
+
+        // Initialize
+        for (int i = 0; i < graph.getNodes().length; i++) {
+            dist[i] = Long.MAX_VALUE;
+            prev[i] = null;
+            queue.add(i);
+        }
+        dist[nodeToIndex(startNode)] = 0L;
+
+        // Logic
+        Integer u, v;
+        Long alt;
+        while (!queue.isEmpty()) {
+            u = queue.poll();
+
+            for (CustomEdge edge : graph.getEdges()) {
+                if (u == nodeToIndex(edge.getStartNode())) {
+                    v = nodeToIndex(edge.getEndNode());
+                    alt = dist[u] + edge.getWeight();
+                    if (alt < dist[v]) {
+                        dist[v] = alt;
+                        prev[v] = u;
+                    }
+                }
+            }
+        }
+
+        // Create shortest path in reverse
+        // TODO
+        ArrayList<CustomEdge> shortestPath = new ArrayList<CustomEdge>();
+
+
 
         Long endTime = System.nanoTime();
         res.setMethodTime(endTime - startTime);
+        res.setShortestPath(null);
 
         shortestPathSummary = res;
     }
@@ -154,5 +187,10 @@ public class ShortestPathService {
         res.setMethodTime(endTime - startTime);
 
         shortestPathSummary = res;
+    }
+
+    // Assuming the nodes start at A and alphabetically increase
+    private int nodeToIndex(String node) {
+        return node.charAt(0) - 'A';
     }
 }
