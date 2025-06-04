@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { backendBase } from '../../util/config';
 
 @Component({
   selector: 'app-homepage',
@@ -7,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './homepage.component.css'
 })
 export class HomepageComponent {
-
+  swaggerUri = backendBase + '/swagger-ui/index.html';
+  albinUri = 'https://github.com/Albin2501';
 }

@@ -1,6 +1,6 @@
 .textContainer {
   position: absolute;
-  top: calc(50% + 2.5rem);
+  top: calc(50% + 4rem);
   left: 50%;
   transform: translate(-50%, -50%);
   white-space: nowrap;
